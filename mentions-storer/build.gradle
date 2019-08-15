@@ -1,0 +1,22 @@
+plugins{
+    id 'application'
+}
+
+apply plugin: 'java'
+
+group = 'de.brandwatch.minianalytics.mention-storer'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+application{
+    mainClassName = 'de.brandwatch.minianalytics.Main'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                'Main-Class': 'de.brandwatch.minianalytics.Main'
+        )
+    }
+}
