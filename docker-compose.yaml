@@ -1,23 +1,22 @@
 version: '3'
 services:
-  #Start Solr Instance
-  solr:
-    image: solr
+  zookeeper:
+    image: wurstmeister/zookeeper
     ports:
-      - "8983:8983"
-    volumes:
-      - data:/opt/solr/server/solr/mycores
-    entrypoint:
-      - docker-entrypoint.sh
-      - solr-precreate
-      - mentions_core
+      - "2181:2181"
 
-  #Start mentions-storer
-  mentions-storer:
-    build: mentions-storer
+  kafka:
+    image: wurstmeister/kafka
+    command: [start-kafka.sh]
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_CREATE_TOPICS: "mentions-topic:1:1:compact"
+      KAFKA_ADVERTISED_PORT: 9092
+    ports:
+      - "9092:9092"
     depends_on:
-      - solr
-
+      - zookeeper
 
 volumes:
   data:

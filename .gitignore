@@ -5,6 +5,10 @@ build/
 !**/src/main/**
 !**/src/test/**
 
+*/target/*
+
+.DS_STORE
+
 ### STS ###
 .apt_generated
 .classpath
