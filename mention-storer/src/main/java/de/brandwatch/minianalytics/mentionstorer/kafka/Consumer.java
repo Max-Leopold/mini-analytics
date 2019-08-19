@@ -8,7 +8,7 @@ public class Consumer {
 
     private static final Logger logger = LoggerFactory.getLogger(Consumer.class);
 
-    @KafkaListener(topics = "mentions-topic")
+    @KafkaListener(topics = "mentions")
     public void receive(String message){
         logger.info("received message='{}'", message);
     }
