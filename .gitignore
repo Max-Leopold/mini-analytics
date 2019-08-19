@@ -35,4 +35,6 @@ out/
 ### VS Code ###
 .vscode/
 
+### Docker-compose ###
 /zk-single-kafka-single/
+/solr/
