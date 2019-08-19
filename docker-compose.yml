@@ -1,0 +1,9 @@
+version: '2.1'
+
+services:
+  solr:
+    image: solr
+    ports:
+      - "8983:8983"
+    volumes:
+      - ./solr/core1/data:/data

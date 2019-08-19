@@ -4,11 +4,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 
-@SolrDocument
+@SolrDocument(solrCoreName = "Mentions")
 public class Mention {
 
-    @Indexed(name = "title", type = "string")
     @Id
+    @Indexed
+    private String id;
+
+    @Indexed(name = "title", type = "string")
     private String title;
 
     @Indexed(name = "author", type = "string")
@@ -50,5 +53,13 @@ public class Mention {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
