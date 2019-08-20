@@ -1,4 +1,4 @@
-package de.brandwatch.minianalytics.mentiongenerator.kafka;
+package de.brandwatch.minianalytics.twitterpuller.kafka;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,9 @@ public class Producer {
     private KafkaTemplate<String, String> kafkaTemplate;
 
     public void send(String message){
+
+        //TODO Build Mention from Twitter JSON
         logger.info("sending message='{}", message);
-        kafkaTemplate.send("mentions-topic",String.valueOf(System.currentTimeMillis()), message);
+        kafkaTemplate.send("twitter", String.valueOf(System.currentTimeMillis()), message);
     }
 }

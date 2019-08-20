@@ -1,7 +1,6 @@
-package de.brandwatch.minianalytics.mentiongenerator.kafka.config;
+package de.brandwatch.minianalytics.twitterpuller.kafka.config;
 
 
-import de.brandwatch.minianalytics.mentiongenerator.kafka.Producer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -9,11 +8,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+@Component
 public class ProducerConfig {
 
     @Value("${kafka.bootstrap-servers}")
@@ -40,10 +41,5 @@ public class ProducerConfig {
     @Bean
     public KafkaTemplate<String, String> kafkaTemplate(){
         return new KafkaTemplate<String, String>(producerFactory());
-    }
-
-    @Bean
-    public Producer producer(){
-        return new Producer();
     }
 }
