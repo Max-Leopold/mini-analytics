@@ -8,10 +8,11 @@
     <version>0.1</version>
     <packaging>pom</packaging>
 
-    <modules>
-        <module>mention-storer</module>
-        <module>mentions-generator</module>
-    </modules>
+  <modules>
+    <module>mention-storer</module>
+    <module>mentions-generator</module>
+    <module>twitterpuller</module>
+  </modules>
 
     <properties>
         <java.version>1.8</java.version>
