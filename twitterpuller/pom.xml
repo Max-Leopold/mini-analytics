@@ -6,7 +6,6 @@
         <artifactId>mini-analytics</artifactId>
         <groupId>de.brandwatch.minianalytics</groupId>
         <version>0.1</version>
-        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>de.brandwatch.minianalytics</groupId>
     <artifactId>twitterpuller</artifactId>
@@ -19,6 +18,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-stream</artifactId>
+            <version>4.0.6</version>
+        </dependency>
     </dependencies>
 
     <build>
