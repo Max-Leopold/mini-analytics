@@ -14,6 +14,6 @@ public class Producer {
 
     public void send(String message){
         logger.info("sending message='{}", message);
-        kafkaTemplate.send("mentions-topic","Hidwdae", message);
+        kafkaTemplate.send("mentions","Hidwdae", message);
     }
 }
