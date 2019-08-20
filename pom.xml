@@ -8,6 +8,7 @@
   <modules>
     <module>mention-storer</module>
     <module>mentions-generator</module>
+    <module>twitterpuller</module>
   </modules>
   <packaging>pom</packaging>
 
