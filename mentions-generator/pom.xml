@@ -6,14 +6,31 @@
     <groupId>de.brandwatch.minianalytics</groupId>
     <artifactId>mini-analytics</artifactId>
     <version>0.1</version>
-    <relativePath></relativePath>
     <!-- lookup parent from repository -->
   </parent>
+
 
   <artifactId>mentions-generator</artifactId>
   <version>0.1</version>
 
-  <dependencies></dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+      <version>2.1.7.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.2.6</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-jpa</artifactId>
+      <version>2.1.10.RELEASE</version>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>
