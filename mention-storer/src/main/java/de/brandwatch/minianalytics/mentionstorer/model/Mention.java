@@ -4,6 +4,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 
+import java.time.LocalDateTime;
+
 @SolrDocument(solrCoreName = "Mentions")
 public class Mention {
 
@@ -11,8 +13,8 @@ public class Mention {
     @Indexed
     private String id;
 
-    @Indexed(name = "title", type = "string")
-    private String title;
+    @Indexed(name = "queryID", type = "long")
+    private long queryID;
 
     @Indexed(name = "author", type = "string")
     private String author;
@@ -21,15 +23,7 @@ public class Mention {
     private String text;
 
     @Indexed(name = "date", type = "string")
-    private String date;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    private LocalDateTime date;
 
     public String getAuthor() {
         return author;
@@ -47,11 +41,11 @@ public class Mention {
         this.text = text;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -61,5 +55,13 @@ public class Mention {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public long getQueryID() {
+        return queryID;
+    }
+
+    public void setQueryID(long queryID) {
+        this.queryID = queryID;
     }
 }
