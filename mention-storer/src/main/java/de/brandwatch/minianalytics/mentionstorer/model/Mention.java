@@ -6,7 +6,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 
 import java.time.LocalDateTime;
 
-@SolrDocument(solrCoreName = "Mentions")
+@SolrDocument(collection = "Mentions")
 public class Mention {
 
     @Id
