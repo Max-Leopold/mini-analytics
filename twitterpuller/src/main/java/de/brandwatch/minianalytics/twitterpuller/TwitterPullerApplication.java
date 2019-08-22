@@ -21,6 +21,6 @@ public class TwitterPullerApplication {
     @PostConstruct
     public void sendTweetsToKafka(){
         TweetFetcher tweetFetcher = new TweetFetcher();
-        tweetFetcher.getTwitterStream(producer).sample();
+        tweetFetcher.getTwitterStream(producer).sample("de");
     }
 }
