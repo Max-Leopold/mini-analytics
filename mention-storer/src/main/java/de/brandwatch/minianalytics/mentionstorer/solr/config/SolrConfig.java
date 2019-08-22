@@ -17,7 +17,7 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 @ComponentScan
 public class SolrConfig {
 
-    @Value("${solr.host}")
+    @Value("${spring.data.solr.host}")
     String solrURL;
 
     @Bean
@@ -26,7 +26,7 @@ public class SolrConfig {
     }
 
     @Bean
-    public SolrTemplate solrTemplate(SolrClient client) throws Exception {
+    public SolrTemplate solrTemplate(SolrClient client) {
         return new SolrTemplate(client);
     }
 }
