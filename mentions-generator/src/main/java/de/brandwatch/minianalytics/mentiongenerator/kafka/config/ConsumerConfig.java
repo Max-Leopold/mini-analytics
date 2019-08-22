@@ -2,7 +2,7 @@ package de.brandwatch.minianalytics.mentiongenerator.kafka.config;
 
 
 import de.brandwatch.minianalytics.mentiongenerator.kafka.Consumer;
-import de.brandwatch.minianalytics.mentiongenerator.model.Mention;
+import de.brandwatch.minianalytics.mentiongenerator.model.Ressource;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +15,7 @@ import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,21 +42,21 @@ public class ConsumerConfig {
 
     @Bean
     public DefaultKafkaConsumerFactory consumerFactory(){
-        JsonDeserializer jsonDeserializer = new JsonDeserializer<>(Mention.class, false);
+        JsonDeserializer jsonDeserializer = new JsonDeserializer<>(Ressource.class, false);
         jsonDeserializer.addTrustedPackages("*");
 
         return new DefaultKafkaConsumerFactory<>(consumerConfigs(), new StringDeserializer(), jsonDeserializer);
     }
 
     @Bean
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, Mention>> kafkaListenerContainerFactory(){
-        ConcurrentKafkaListenerContainerFactory<String, Mention> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, Ressource>> kafkaListenerContainerFactory(){
+        ConcurrentKafkaListenerContainerFactory<String, Ressource> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }
 
     @Bean
-    public Consumer consumer(){
+    public Consumer consumer() throws IOException {
         return new Consumer();
     }
 }

@@ -8,9 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import java.time.LocalDateTime;
 
-public class Mention {
-
-    private long queryID;
+public class Ressource {
 
     private String author;
     private String text;
@@ -19,7 +17,7 @@ public class Mention {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime date;
 
-    public Mention() {
+    public Ressource() {
     }
 
     public String getAuthor() {
@@ -46,18 +44,9 @@ public class Mention {
         this.date = date;
     }
 
-    public long getQueryID() {
-        return queryID;
-    }
-
-    public void setQueryID(long queryID) {
-        this.queryID = queryID;
-    }
-
     @Override
     public String toString() {
         return "{\n" +
-                "\tqueryID: " + getQueryID() + "\n" +
                 "\tauthor: " + getAuthor() + "\n" +
                 "\ttext: " + getText() + "\n" +
                 "\tdate: " + getDate().toString() + "\n" +

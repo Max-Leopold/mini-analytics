@@ -20,4 +20,25 @@ public class Query {
 
     public Query() {
     }
+
+    public long getQueryID() {
+        return queryID;
+    }
+
+    public void setQueryID(long queryID) {
+        this.queryID = queryID;
+    }
+
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }
+
+    @Override
+    public String toString() {
+        return query;
+    }
 }
