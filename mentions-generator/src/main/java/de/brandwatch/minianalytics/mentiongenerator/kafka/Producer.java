@@ -1,5 +1,7 @@
 package de.brandwatch.minianalytics.mentiongenerator.kafka;
 
+import de.brandwatch.minianalytics.mentiongenerator.model.Mention;
+import de.brandwatch.minianalytics.mentiongenerator.model.Ressource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +12,10 @@ public class Producer {
     private static final Logger logger = LoggerFactory.getLogger(Producer.class);
 
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, Mention> kafkaTemplate;
 
-    public void send(String message) {
-        logger.info("sending message='{}", message);
-        kafkaTemplate.send("mentions", "Hidwdae", message);
+    public void send(Mention mention){
+        logger.info("sending message='{}", mention);
+        kafkaTemplate.send("mentions",String.valueOf(System.currentTimeMillis()), mention);
     }
 }

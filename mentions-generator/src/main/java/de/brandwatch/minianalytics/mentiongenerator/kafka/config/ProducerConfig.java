@@ -2,6 +2,8 @@ package de.brandwatch.minianalytics.mentiongenerator.kafka.config;
 
 
 import de.brandwatch.minianalytics.mentiongenerator.kafka.Producer;
+import de.brandwatch.minianalytics.mentiongenerator.model.Mention;
+import de.brandwatch.minianalytics.mentiongenerator.model.Ressource;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -32,13 +34,13 @@ public class ProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, String> producerFactory() {
-        return new DefaultKafkaProducerFactory<String, String>(producerConfigs());
+    public ProducerFactory<String, Mention> producerFactory(){
+        return new DefaultKafkaProducerFactory<String, Mention>(producerConfigs());
     }
 
     @Bean
-    public KafkaTemplate<String, String> kafkaTemplate() {
-        return new KafkaTemplate<String, String>(producerFactory());
+    public KafkaTemplate<String, Mention> kafkaTemplate(){
+        return new KafkaTemplate<String, Mention>(producerFactory());
     }
 
     @Bean

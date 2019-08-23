@@ -92,7 +92,7 @@ public class Consumer {
 
                 logger.info("Query " + query.getQueryID() + " hit on ressource " + ressource.getText());
 
-                //Create Ressource out of document
+                //Create Mention out of ressource
                 Mention mention = new Mention();
 
                 mention.setQueryID(query.getQueryID());
@@ -101,6 +101,8 @@ public class Consumer {
                 mention.setDate(ressource.getDate());
 
                 logger.info("Generated Mention: " + mention.toString());
+
+                producer.send(mention);
 
             }
         }
