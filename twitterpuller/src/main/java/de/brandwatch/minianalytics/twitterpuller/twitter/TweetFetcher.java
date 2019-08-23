@@ -2,11 +2,8 @@ package de.brandwatch.minianalytics.twitterpuller.twitter;
 
 import de.brandwatch.minianalytics.twitterpuller.kafka.Producer;
 import de.brandwatch.minianalytics.twitterpuller.model.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import twitter4j.*;
 
-import javax.annotation.PostConstruct;
-import java.sql.Timestamp;
 import java.time.Instant;
 
 public class TweetFetcher {
@@ -25,7 +22,7 @@ public class TweetFetcher {
                 resource.setAuthor(status.getUser().getName());
 
                 //Post mention into Kafka Topic
-                producer.send(ressource);
+                producer.send(resource);
 
             }
 

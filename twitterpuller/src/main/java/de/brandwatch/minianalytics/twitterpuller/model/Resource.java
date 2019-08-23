@@ -4,8 +4,7 @@ import java.time.Instant;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.InstantTimeSerializer;
-
+import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
 import java.time.Instant;
 
 public class Resource {
@@ -14,8 +13,9 @@ public class Resource {
     private String text;
 
     @JsonSerialize(using = InstantSerializer.class)
-    @JsonDeserialize(using = InstantTimeDeserializer.class)
+    @JsonDeserialize(using = InstantDeserializer.class)
     private Instant date;
+
 
     public String getAuthor() {
         return author;

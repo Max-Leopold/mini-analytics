@@ -2,7 +2,7 @@ package de.brandwatch.minianalytics.twitterpuller.kafka.config;
 
 
 import de.brandwatch.minianalytics.twitterpuller.kafka.Producer;
-import de.brandwatch.minianalytics.twitterpuller.model.Mention;
+import de.brandwatch.minianalytics.twitterpuller.model.Resource;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -34,12 +34,12 @@ public class ProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, Mention> producerFactory(){
+    public ProducerFactory<String, Resource> producerFactory(){
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
     @Bean
-    public KafkaTemplate<String, Mention> kafkaTemplate(){
+    public KafkaTemplate<String, Resource> kafkaTemplate(){
         return new KafkaTemplate<>(producerFactory());
     }
 
