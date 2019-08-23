@@ -12,8 +12,8 @@ public class Producer {
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    public void send(String message){
+    public void send(String message) {
         logger.info("sending message='{}", message);
-        kafkaTemplate.send("mentions","Hidwdae", message);
+        kafkaTemplate.send("mentions", "Hidwdae", message);
     }
 }
