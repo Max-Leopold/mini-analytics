@@ -20,7 +20,7 @@ public class ProducerConfig {
     private String bootstrapServers;
 
     @Bean
-    public Map<String, Object> producerConfigs(){
+    public Map<String, Object> producerConfigs() {
 
         Map<String, Object> producerConfig = new HashMap<String, Object>();
 
@@ -32,17 +32,17 @@ public class ProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, String> producerFactory(){
+    public ProducerFactory<String, String> producerFactory() {
         return new DefaultKafkaProducerFactory<String, String>(producerConfigs());
     }
 
     @Bean
-    public KafkaTemplate<String, String> kafkaTemplate(){
+    public KafkaTemplate<String, String> kafkaTemplate() {
         return new KafkaTemplate<String, String>(producerFactory());
     }
 
     @Bean
-    public Producer producer(){
+    public Producer producer() {
         return new Producer();
     }
 }

@@ -18,7 +18,7 @@ public class MentionsGeneratorApplication {
     private Producer producer;
 
     @PostConstruct
-    public void sendMessagesOnKafka(){
+    public void sendMessagesOnKafka() {
         producer.send("Waz up?");
     }
 }

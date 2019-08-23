@@ -24,7 +24,7 @@ public class ConsumerConfig {
     private String bootstrapServers;
 
     @Bean
-    public Map<String, Object> consumerConfigs(){
+    public Map<String, Object> consumerConfigs() {
         Map<String, Object> props = new HashMap<String, Object>();
 
         props.put(org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -38,19 +38,19 @@ public class ConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, String> consumerFactory(){
+    public ConsumerFactory<String, String> consumerFactory() {
         return new DefaultKafkaConsumerFactory<String, String>(consumerConfigs());
     }
 
     @Bean
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory(){
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<String, String>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }
 
     @Bean
-    public Consumer consumer(){
+    public Consumer consumer() {
         return new Consumer();
     }
 }
