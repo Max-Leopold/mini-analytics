@@ -14,7 +14,7 @@ public class Producer {
 
     public void send(String message){
 
-        //TODO Build Mention from Twitter JSON
+        //TODO Build Ressource from Twitter JSON
         logger.info("sending message='{}", message);
         kafkaTemplate.send("twitter", String.valueOf(System.currentTimeMillis()), message);
     }
