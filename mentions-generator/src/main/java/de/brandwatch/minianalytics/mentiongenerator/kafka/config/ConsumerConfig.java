@@ -19,7 +19,6 @@ import java.util.Map;
 
 @Configuration
 @EnableKafka
-@Component
 public class ConsumerConfig {
 
     @Value("${kafka.bootstrap-servers.consumer}")
