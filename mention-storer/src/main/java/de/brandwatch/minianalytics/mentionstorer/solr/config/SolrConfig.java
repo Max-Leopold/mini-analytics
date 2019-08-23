@@ -14,7 +14,6 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 @EnableSolrRepositories(
         basePackages = "de.brandwatch.minianalytics.mentionstorer.solr.repository"
         )
-@ComponentScan
 public class SolrConfig {
 
     @Value("${spring.data.solr.host}")
