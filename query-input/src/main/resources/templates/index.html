@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset = "ISO-8859-1" />
+</head>
+<body>
+Query: <input type="text" size="50%" id="query">
+<input type="submit" value="Submit" onclick="send()">
+</body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    function send() {
+        console.log("Send method called");
+        axios.post('http://localhost:8080/send', null, {params: {
+            name: document.getElementById("query").value
+        }})
+    }
+</script>
+</html>
