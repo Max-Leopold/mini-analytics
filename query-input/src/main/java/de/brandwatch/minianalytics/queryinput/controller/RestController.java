@@ -9,13 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
 
-    Logger logger = LoggerFactory.getLogger(RestController.class);
+    private static final Logger logger = LoggerFactory.getLogger(RestController.class);
 
     @Autowired
     MentionRepository mentionRepository;
@@ -29,8 +28,8 @@ public class RestController {
         logger.info("Retrieved name: " + name);
     }
 
-    @RequestMapping(value = "/mentions/{queryID}", method = RequestMethod.GET)
-    public ResponseEntity getMentions(@PathVariable("queryID") String queryID) {
-        return ResponseEntity.status(200).body(gson.toJson(mentionRepository.findByQueryID(Long.parseLong(queryID))));
+    @RequestMapping(value = "/mentions/{queryID}")
+    public ResponseEntity findMentionsFromQuery(@PathVariable String queryID){
+        return ResponseEntity.status(200).body(mentionRepository.findByQueryID(Long.parseLong(queryID)));
     }
 }
