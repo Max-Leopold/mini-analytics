@@ -69,9 +69,21 @@ services:
     depends_on:
       - zoo1
 
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: QueryDB
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - postgres:/var/lib/postgres/data
+
 volumes:
   kafka1:
   kafka2:
   kafka3:
   zookeeper:
-  solr:
+  postgres:
