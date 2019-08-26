@@ -38,3 +38,6 @@ out/
 ### Docker-compose ###
 /zk-single-kafka-single/
 /solr/
+
+##Twitter Credentials
+/twitterpuller/src/main/resources/twitter4j.properties

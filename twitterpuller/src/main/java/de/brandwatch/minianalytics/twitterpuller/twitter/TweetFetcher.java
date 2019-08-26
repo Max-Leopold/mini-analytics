@@ -9,8 +9,6 @@ public class TweetFetcher {
 
     public TwitterStream getTwitterStream() {
 
-
-
         TwitterStream twitterStream = new TwitterStreamFactory().getInstance();
         twitterStream.addListener(new StatusListener() {
             public void onStatus(Status status) {
