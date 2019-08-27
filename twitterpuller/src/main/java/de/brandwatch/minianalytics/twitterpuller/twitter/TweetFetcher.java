@@ -1,14 +1,12 @@
 package de.brandwatch.minianalytics.twitterpuller.twitter;
 
 import de.brandwatch.minianalytics.twitterpuller.kafka.Producer;
-import de.brandwatch.minianalytics.twitterpuller.model.Ressource;
+import de.brandwatch.minianalytics.twitterpuller.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import twitter4j.*;
-import twitter4j.conf.ConfigurationBuilder;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 public class TweetFetcher {
 
@@ -23,10 +21,10 @@ public class TweetFetcher {
             public void onStatus(Status status) {
                 Instant date = new Timestamp(status.getCreatedAt().getTime()).toInstant();
 
-                Ressource ressource = new Ressource();
-                ressource.setDate(date);
-                ressource.setText(status.getText());
-                ressource.setAuthor(status.getUser().getName());
+                Resource resource = new Resource();
+                resource.setDate(date);
+                resource.setText(status.getText());
+                resource.setAuthor(status.getUser().getName());
 
                 //TODO JSON Serializer und Mentions in Topic posten
 

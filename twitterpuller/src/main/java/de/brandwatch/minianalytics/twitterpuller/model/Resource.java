@@ -3,7 +3,7 @@ package de.brandwatch.minianalytics.twitterpuller.model;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
-public class Ressource {
+public class Resource {
 
     private String author;
     private String text;
