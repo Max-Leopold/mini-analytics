@@ -5,7 +5,6 @@ import de.brandwatch.minianalytics.twitterpuller.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import twitter4j.*;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 
 public class TweetFetcher {
@@ -19,7 +18,7 @@ public class TweetFetcher {
         TwitterStream twitterStream = new TwitterStreamFactory().getInstance();
         twitterStream.addListener(new StatusListener() {
             public void onStatus(Status status) {
-                Instant date = new Timestamp(status.getCreatedAt().getTime()).toInstant();
+                Instant date = Instant.ofEpochMilli(status.getCreatedAt().getTime());
 
                 Resource resource = new Resource();
                 resource.setDate(date);

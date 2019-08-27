@@ -1,7 +1,6 @@
 package de.brandwatch.minianalytics.twitterpuller.model;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 public class Resource {
 
