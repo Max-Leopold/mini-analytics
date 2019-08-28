@@ -4,17 +4,26 @@ import de.brandwatch.minianalytics.twitterpuller.twitter.TweetProducer;
 import de.brandwatch.minianalytics.twitterpuller.twitter.TwitterPullerStatusListener;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 
+import java.time.Instant;
+
 @SpringBootApplication
+@EnableScheduling
+@EnableCaching
 public class TwitterPullerApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TwitterPullerApplication.class, args);
     }
-
 
     @Bean
     public TwitterStream getTwitterStream(TwitterPullerStatusListener listener) {
@@ -24,7 +33,19 @@ public class TwitterPullerApplication {
     }
 
     @Bean(initMethod = "sendTweetsToKafka")
-    public TweetProducer tweetProducer(TwitterStream twitterStream){
+    public TweetProducer tweetProducer(TwitterStream twitterStream) {
         return new TweetProducer(twitterStream);
+    }
+
+    @Bean
+    public CacheManager cacheManager() {
+        return new ConcurrentMapCacheManager("{queryID, query}");
+    }
+
+    //Refreh Cache every 10 minutes
+    @CacheEvict(allEntries = true, cacheNames = "{queryID, query}")
+    @Scheduled(fixedDelay = 10 * 60 * 1000)
+    public void reportCacheEvict() {
+        System.out.println("Flush Cache " + Instant.now());
     }
 }
