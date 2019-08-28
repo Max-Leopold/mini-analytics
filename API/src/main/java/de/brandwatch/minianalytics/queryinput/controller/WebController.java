@@ -3,12 +3,13 @@ package de.brandwatch.minianalytics.queryinput.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@org.springframework.stereotype.Controller
-public class Controller {
+@Controller
+public class WebController {
 
-    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebController.class);
 
 
     @GetMapping(value = "/index")

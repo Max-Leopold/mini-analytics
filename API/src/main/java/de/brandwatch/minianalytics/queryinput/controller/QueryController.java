@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @org.springframework.web.bind.annotation.RestController
-public class RestController {
+public class QueryController {
 
-    private static final Logger logger = LoggerFactory.getLogger(RestController.class);
+    private static final Logger logger = LoggerFactory.getLogger(QueryController.class);
 
     @Autowired
     private QueryService queryService;
