@@ -1,8 +1,8 @@
-package de.brandwatch.minianalytics.queryinput.controller;
+package de.brandwatch.minianalytics.api.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import de.brandwatch.minianalytics.queryinput.service.QueryService;
+import de.brandwatch.minianalytics.api.service.QueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -41,7 +41,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <mainClass>de.brandwatch.minianalytics.queryinput.QueryInputApplication</mainClass>
+          <mainClass>de.brandwatch.minianalytics.api.QueryInputApplication</mainClass>
         </configuration>
 
         <executions>

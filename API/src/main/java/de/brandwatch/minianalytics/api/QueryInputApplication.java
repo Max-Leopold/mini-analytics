@@ -1,4 +1,4 @@
-package de.brandwatch.minianalytics.queryinput;
+package de.brandwatch.minianalytics.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

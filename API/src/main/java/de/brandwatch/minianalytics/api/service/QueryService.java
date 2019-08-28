@@ -1,9 +1,9 @@
-package de.brandwatch.minianalytics.queryinput.service;
+package de.brandwatch.minianalytics.api.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import de.brandwatch.minianalytics.queryinput.postgres.model.Query;
-import de.brandwatch.minianalytics.queryinput.postgres.repository.QueryRepository;
+import de.brandwatch.minianalytics.api.postgres.model.Query;
+import de.brandwatch.minianalytics.api.postgres.repository.QueryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

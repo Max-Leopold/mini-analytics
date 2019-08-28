@@ -1,4 +1,4 @@
-package de.brandwatch.minianalytics.queryinput.postgres.model;
+package de.brandwatch.minianalytics.api.postgres.model;
 
 import javax.persistence.*;
 

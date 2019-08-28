@@ -1,4 +1,4 @@
-package de.brandwatch.minianalytics.queryinput.controller;
+package de.brandwatch.minianalytics.api.controller;
 
 
 import org.slf4j.Logger;
