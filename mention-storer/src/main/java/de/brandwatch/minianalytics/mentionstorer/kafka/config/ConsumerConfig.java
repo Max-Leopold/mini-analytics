@@ -40,17 +40,17 @@ public class ConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, Mention> consumerFactory(Map<String, Object> superConfig) {
+    public ConsumerFactory<String, Mention> consumerFactory() {
         JsonDeserializer<Mention> jsonDeserializer = new JsonDeserializer<>(Mention.class, false);
         jsonDeserializer.addTrustedPackages("*");
 
-        return new DefaultKafkaConsumerFactory<>(superConfig, new StringDeserializer(), jsonDeserializer);
+        return new DefaultKafkaConsumerFactory<>(consumerConfigs(), new StringDeserializer(), jsonDeserializer);
     }
 
     @Bean
-    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, Mention>> kafkaListenerContainerFactory(ConsumerFactory<String, Mention> consumerFactory) {
+    public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, Mention>> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Mention> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory);
+        factory.setConsumerFactory(consumerFactory());
         return factory;
     }
 
