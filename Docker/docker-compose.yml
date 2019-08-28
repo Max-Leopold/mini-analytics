@@ -81,9 +81,30 @@ services:
     volumes:
       - postgres:/var/lib/postgres/data
 
+  solr:
+    image: solr
+    hostname: solr
+    ports:
+      - "8983:8983"
+    environment:
+      ZK_HOST: zoo1:2181
+    entrypoint:
+      - bash
+      - "-c"
+      - "exec solr -c -f"
+
+  create-collection:
+    build: .
+    hostname: create-collection
+    environment:
+      WAIT_HOSTS: solr:8983
+      WAIT_HOSTS_TIMEOUT: 60
+
 volumes:
   kafka1:
   kafka2:
   kafka3:
   zookeeper:
   postgres:
+  solr:
+
