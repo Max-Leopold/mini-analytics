@@ -8,7 +8,7 @@
     <!-- lookup parent from repository -->
   </parent>
 
-  <artifactId>query-input</artifactId>
+  <artifactId>API</artifactId>
   <version>0.1</version>
 
   <properties>
