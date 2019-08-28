@@ -1,12 +1,21 @@
 package de.brandwatch.minianalytics.twitterpuller.model;
 
 import java.time.Instant;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
+import java.time.Instant;
 
 public class Resource {
 
     private String author;
     private String text;
+
+    @JsonSerialize(using = InstantSerializer.class)
+    @JsonDeserialize(using = InstantDeserializer.class)
     private Instant date;
+
 
     public String getAuthor() {
         return author;
