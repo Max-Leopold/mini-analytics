@@ -12,7 +12,7 @@ public class Consumer {
     private static final Logger logger = LoggerFactory.getLogger(Consumer.class);
 
     @Autowired
-    MentionRepository mentionRepository;
+    private MentionRepository mentionRepository;
 
     @KafkaListener(topics = "mentions")
     public void receive(Mention mention) {
