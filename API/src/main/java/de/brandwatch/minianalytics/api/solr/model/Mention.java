@@ -8,7 +8,7 @@ import org.springframework.data.solr.core.mapping.SolrDocument;
 
 import java.time.Instant;
 
-@SolrDocument(collection = "Mentions")
+@SolrDocument(collection = "mentions")
 public class Mention {
 
     @Id

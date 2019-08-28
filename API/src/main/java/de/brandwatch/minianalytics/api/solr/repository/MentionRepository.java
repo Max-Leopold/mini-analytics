@@ -12,4 +12,7 @@ public interface MentionRepository extends SolrCrudRepository<Mention, String> {
     List<Mention> findMentions();
 
     List<Mention> findByQueryID(Long QueryID);
+
+    @Query("queryID:?0 AND date:?1")
+    List<Mention> findMentionsAfterDate(Long QueryID, String date);
 }
