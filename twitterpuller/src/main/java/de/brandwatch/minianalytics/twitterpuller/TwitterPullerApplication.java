@@ -16,7 +16,7 @@ public class TwitterPullerApplication {
     }
 
     @Autowired
-    Producer producer;
+    private Producer producer;
 
     @PostConstruct
     public void sendTweetsToKafka(){
