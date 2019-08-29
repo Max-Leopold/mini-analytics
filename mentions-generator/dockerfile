@@ -1,0 +1,5 @@
+FROM openjdk:8-jre
+COPY ./target/mentions-generator-0.1.jar /usr/src/mention-generator/
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.5.1/wait /wait
+RUN chmod +x /wait
+CMD /wait && java -jar /usr/src/mention-generator/mentions-generator-0.1.jar

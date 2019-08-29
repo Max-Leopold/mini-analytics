@@ -33,7 +33,7 @@ services:
       - zoo1
 
   kafka2:
-    image: confluentinc/cp-kafka:5.3.0
+    image: confluentinc/cp-kafka:latest
     hostname: kafka2
     ports:
       - "9093:9093"
@@ -51,7 +51,7 @@ services:
       - zoo1
 
   kafka3:
-    image: confluentinc/cp-kafka:5.3.0
+    image: confluentinc/cp-kafka:latest
     hostname: kafka3
     ports:
       - "9094:9094"
@@ -125,9 +125,16 @@ services:
     environment:
       WAIT_HOSTS: solr:8983
     depends_on:
-      - zoo1
       - kafka1
 
+  mentions-generator:
+    build:
+      context: ../mentions-generator/
+      dockerfile: dockerfile
+    hostname: mentions-generator
+    restart: always
+    environment:
+      WAIT_HOSTS: postgres:5432
 
 volumes:
   kafka1:
