@@ -124,8 +124,6 @@ services:
     restart: always
     environment:
       WAIT_HOSTS: solr:8983
-    depends_on:
-      - kafka1
 
   mentions-generator:
     build:
@@ -135,6 +133,17 @@ services:
     restart: always
     environment:
       WAIT_HOSTS: postgres:5432
+
+  twitter-puller:
+    build:
+      context: ../twitterpuller/
+      dockerfile: dockerfile
+    hostname: twitterpuller
+    restart: always
+    environment:
+      WAIT_HOSTS: postgres:5432
+
+
 
 volumes:
   kafka1:
