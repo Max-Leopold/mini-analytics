@@ -1,6 +1,5 @@
 package de.brandwatch.minianalytics.twitterpuller;
 
-import de.brandwatch.minianalytics.twitterpuller.kafka.Producer;
 import de.brandwatch.minianalytics.twitterpuller.twitter.TweetFetcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -16,9 +15,6 @@ public class TwitterPullerApplication {
     }
 
     private TweetFetcher tweetFetcher;
-
-    @Autowired
-    Producer producer;
 
     @Autowired
     public TwitterPullerApplication(TweetFetcher tweetFetcher) {

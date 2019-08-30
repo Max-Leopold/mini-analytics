@@ -14,7 +14,7 @@ import java.time.Instant;
 @Component
 public class TwitterPullerStatusListener implements StatusListener {
 
-    private Producer producer;
+    private final Producer producer;
 
     @Autowired
     public TwitterPullerStatusListener(Producer producer) {

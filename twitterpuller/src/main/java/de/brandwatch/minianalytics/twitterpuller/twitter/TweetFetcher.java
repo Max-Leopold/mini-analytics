@@ -1,15 +1,15 @@
 package de.brandwatch.minianalytics.twitterpuller.twitter;
 
-import de.brandwatch.minianalytics.twitterpuller.kafka.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import twitter4j.*;
+import twitter4j.TwitterStream;
+import twitter4j.TwitterStreamFactory;
 
 
 @Component
 public class TweetFetcher {
 
-    private TwitterPullerStatusListener listener;
+    private final TwitterPullerStatusListener listener;
 
     @Autowired
     public TweetFetcher(TwitterPullerStatusListener listener) {
@@ -17,7 +17,6 @@ public class TweetFetcher {
     }
 
     public TwitterStream getTwitterStream() {
-
         TwitterStream twitterStream = TwitterStreamFactory.getSingleton();
         twitterStream.addListener(listener);
         return twitterStream;
