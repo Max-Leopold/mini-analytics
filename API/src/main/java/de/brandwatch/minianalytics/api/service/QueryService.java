@@ -7,8 +7,10 @@ import de.brandwatch.minianalytics.api.postgres.repository.QueryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class QueryService {
@@ -17,33 +19,25 @@ public class QueryService {
 
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
+    private final QueryRepository queryRepository;
+
     @Autowired
-    private QueryRepository queryRepository;
-
-    public ResponseEntity createQuery(String query){
-        try {
-            Query saveQuery = new Query(query);
-
-            logger.info("Retrieved query: " + query);
-            return ResponseEntity.status(200).body(gson.toJson(queryRepository.save(saveQuery)));
-        } catch (Exception e){
-            return ResponseEntity.status(500).body("Something went wrong");
-        }
+    public QueryService(QueryRepository queryRepository) {
+        this.queryRepository = queryRepository;
     }
 
-    public ResponseEntity getAllQueries(){
-        try {
-            return ResponseEntity.status(200).body(gson.toJson(queryRepository.findAll()));
-        } catch (Exception e){
-            return ResponseEntity.status(500).body("Something went wrong");
-        }
+    public Query createQuery(String query) {
+        Query saveQuery = new Query(query);
+
+        logger.info("Retrieved query: " + query);
+        return queryRepository.save(saveQuery);
     }
 
-    public ResponseEntity getQueryByID(String queryID){
-        try{
-            return ResponseEntity.status(200).body(gson.toJson(queryRepository.findById(Long.valueOf(queryID))));
-        } catch (Exception e){
-            return ResponseEntity.status(500).body("Something went wrong");
-        }
+    public List<Query> getAllQueries() {
+        return queryRepository.findAll();
+    }
+
+    public Optional<Query> getQueryByID(String queryID) {
+        return queryRepository.findById(Long.valueOf(queryID));
     }
 }
