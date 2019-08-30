@@ -15,12 +15,18 @@ public class TwitterPullerApplication {
         SpringApplication.run(TwitterPullerApplication.class, args);
     }
 
+    private TweetFetcher tweetFetcher;
+
     @Autowired
-    private Producer producer;
+    Producer producer;
+
+    @Autowired
+    public TwitterPullerApplication(TweetFetcher tweetFetcher) {
+        this.tweetFetcher = tweetFetcher;
+    }
 
     @PostConstruct
-    public void sendTweetsToKafka(){
-        TweetFetcher tweetFetcher = new TweetFetcher();
-        tweetFetcher.getTwitterStream(producer).sample("de");
+    public void sendTweetsToKafka() {
+        tweetFetcher.getTwitterStream().sample("de");
     }
 }
