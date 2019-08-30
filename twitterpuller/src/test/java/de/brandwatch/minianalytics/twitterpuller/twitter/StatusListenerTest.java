@@ -8,14 +8,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.junit.jupiter.MockitoExtension;
 import twitter4j.Status;
 import twitter4j.User;
 
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -53,9 +52,6 @@ class StatusListenerTest {
         expectedResource.setDate(date.toInstant());
         expectedResource.setText("Hello World");
 
-
-        verify(producer).send(argumentCaptor.capture());
-
-        assertTrue(new ReflectionEquals(expectedResource).matches(argumentCaptor.getValue()));
+        verify(producer).send(eq(expectedResource));
     }
 }

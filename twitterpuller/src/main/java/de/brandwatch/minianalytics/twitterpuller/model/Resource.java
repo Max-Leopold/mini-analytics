@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
 
 import java.time.Instant;
+import java.util.Objects;
 
 public class Resource {
 
@@ -42,12 +43,17 @@ public class Resource {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Resource)) return false;
+        Resource resource = (Resource) o;
+        return Objects.equals(getAuthor(), resource.getAuthor()) &&
+                Objects.equals(getText(), resource.getText()) &&
+                Objects.equals(getDate(), resource.getDate());
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hash(getAuthor(), getText(), getDate());
     }
 }
