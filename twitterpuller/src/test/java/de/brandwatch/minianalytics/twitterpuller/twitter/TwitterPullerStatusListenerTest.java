@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class StatusListenerTest {
+class TwitterPullerStatusListenerTest {
 
     @Mock
     private Producer producer;
