@@ -1,12 +1,12 @@
 package de.brandwatch.minianalytics.twitterpuller;
 
-import de.brandwatch.minianalytics.twitterpuller.kafka.Producer;
-import de.brandwatch.minianalytics.twitterpuller.twitter.TweetFetcher;
-import org.springframework.beans.factory.annotation.Autowired;
+import de.brandwatch.minianalytics.twitterpuller.twitter.TweetProducer;
+import de.brandwatch.minianalytics.twitterpuller.twitter.TwitterPullerStatusListener;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import javax.annotation.PostConstruct;
+import org.springframework.context.annotation.Bean;
+import twitter4j.TwitterStream;
+import twitter4j.TwitterStreamFactory;
 
 @SpringBootApplication
 public class TwitterPullerApplication {
@@ -15,12 +15,16 @@ public class TwitterPullerApplication {
         SpringApplication.run(TwitterPullerApplication.class, args);
     }
 
-    @Autowired
-    private Producer producer;
 
-    @PostConstruct
-    public void sendTweetsToKafka(){
-        TweetFetcher tweetFetcher = new TweetFetcher();
-        tweetFetcher.getTwitterStream(producer).sample("de");
+    @Bean
+    public TwitterStream getTwitterStream(TwitterPullerStatusListener listener) {
+        TwitterStream twitterStream = TwitterStreamFactory.getSingleton();
+        twitterStream.addListener(listener);
+        return twitterStream;
+    }
+
+    @Bean(initMethod = "sendTweetsToKafka")
+    public TweetProducer tweetProducer(TwitterStream twitterStream){
+        return new TweetProducer(twitterStream);
     }
 }
