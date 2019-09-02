@@ -5,7 +5,6 @@ import de.brandwatch.minianalytics.twitterpuller.kafka.Producer;
 import de.brandwatch.minianalytics.twitterpuller.model.Resource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -42,8 +41,6 @@ class StatusListenerTest {
         when(status.getUser()).thenReturn(user);
         when(user.getName()).thenReturn("Max Leopold");
         when(status.getCreatedAt()).thenReturn(date);
-
-        ArgumentCaptor<Resource> argumentCaptor = ArgumentCaptor.forClass(Resource.class);
 
         twitterPullerStatusListener.onStatus(status);
 
