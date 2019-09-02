@@ -29,8 +29,7 @@ public class QueryController {
     @PostMapping(value = "/queries")
     public ResponseEntity query(@RequestParam String query){
         try {
-            logger.info("POST API Call: /query");
-            logger.info("Query: " + query);
+            logger.info("POST /queries: {}", query);
 
             return ResponseEntity.status(200).body(queryService.createQuery(query));
         }catch (Exception e){
@@ -41,8 +40,9 @@ public class QueryController {
 
     @GetMapping(value = "/queries")
     public ResponseEntity queries(){
-        logger.info("GET API Call: /queries");
         try{
+            logger.info("GET /queries");
+
             return ResponseEntity.status(200).body(queryService.getAllQueries());
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "", e);
@@ -51,8 +51,9 @@ public class QueryController {
 
     @GetMapping(value = "/queries/{queryID}")
     public ResponseEntity singleQuery(@PathVariable("queryID") String queryID){
-        logger.info("GET API Call: /queries/" + queryID);
         try{
+            logger.info("GET /queries/" + queryID);
+
             return ResponseEntity.status(200).body(queryService.getQueryByID(queryID));
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "", e);
