@@ -10,10 +10,10 @@ public class Producer {
 
     private static final Logger logger = LoggerFactory.getLogger(Producer.class);
 
-    @Autowired
     private KafkaTemplate<String, Mention> kafkaTemplate;
 
-    public Producer() {
+    @Autowired
+    public Producer(KafkaTemplate<String, Mention> kafkaTemplate) {
     }
 
     public void send(Mention mention){

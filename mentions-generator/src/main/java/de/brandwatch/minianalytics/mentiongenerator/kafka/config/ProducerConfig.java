@@ -3,7 +3,6 @@ package de.brandwatch.minianalytics.mentiongenerator.kafka.config;
 
 import de.brandwatch.minianalytics.mentiongenerator.kafka.Producer;
 import de.brandwatch.minianalytics.mentiongenerator.model.Mention;
-import de.brandwatch.minianalytics.mentiongenerator.model.Ressource;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +23,7 @@ public class ProducerConfig {
     @Bean
     public Map<String, Object> producerConfigs() {
 
-        Map<String, Object> producerConfig = new HashMap<String, Object>();
+        Map<String, Object> producerConfig = new HashMap<>();
 
         producerConfig.put(org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         producerConfig.put(org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -35,16 +34,16 @@ public class ProducerConfig {
 
     @Bean
     public ProducerFactory<String, Mention> producerFactory(){
-        return new DefaultKafkaProducerFactory<String, Mention>(producerConfigs());
+        return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
     @Bean
     public KafkaTemplate<String, Mention> kafkaTemplate(){
-        return new KafkaTemplate<String, Mention>(producerFactory());
+        return new KafkaTemplate<>(producerFactory());
     }
 
     @Bean
-    public Producer producer() {
-        return new Producer();
+    public Producer producer(KafkaTemplate<String, Mention> kafkaTemplate) {
+        return new Producer(kafkaTemplate);
     }
 }

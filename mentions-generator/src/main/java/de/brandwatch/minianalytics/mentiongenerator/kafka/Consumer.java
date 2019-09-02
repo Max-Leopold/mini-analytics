@@ -1,7 +1,7 @@
 package de.brandwatch.minianalytics.mentiongenerator.kafka;
 
 import de.brandwatch.minianalytics.mentiongenerator.model.Mention;
-import de.brandwatch.minianalytics.mentiongenerator.model.Ressource;
+import de.brandwatch.minianalytics.mentiongenerator.model.Resource;
 import de.brandwatch.minianalytics.mentiongenerator.postgres.model.Query;
 import de.brandwatch.minianalytics.mentiongenerator.postgres.repository.QueryRepository;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -30,10 +30,8 @@ public class Consumer {
 
     private static final Logger logger = LoggerFactory.getLogger(Consumer.class);
 
-    @Autowired
     private QueryRepository queryRepository;
 
-    @Autowired
     private Producer producer;
 
     private Directory memoryIndex = new RAMDirectory();
@@ -47,21 +45,23 @@ public class Consumer {
 
     private QueryParser queryParser = new QueryParser("text", analyzer);
 
-    public Consumer() throws IOException {
+    @Autowired
+    public Consumer(QueryRepository queryRepository, Producer producer) throws IOException {
+        this.queryRepository = queryRepository;
+        this.producer = producer;
     }
 
     @KafkaListener(topics = "twitter")
-    public void receive(Ressource ressource) throws ParseException, IOException {
-        logger.info("received message='{}'", ressource.toString());
+    public void receive(Resource resource) throws ParseException, IOException {
+        logger.info("received message='{}'", resource.toString());
 
-        //TODO Create Lucene Document out of Ressource
+        //Create Lucene Document out of Resource
         Document document = new Document();
 
-        document.add(new TextField("author", ressource.getAuthor(), Field.Store.YES));
-        document.add(new TextField("text", ressource.getText(), Field.Store.YES));
+        document.add(new TextField("author", resource.getAuthor(), Field.Store.YES));
+        document.add(new TextField("text", resource.getText(), Field.Store.YES));
 
-        logger.info("Document text: " + document.get("text"));
-        logger.info("Document author: " + document.get("author"));
+        logger.info("Indexed document:\n{\n\tauthor: " + document.get("author") + "\n\ttext: " + document.get("text") + "\n}");
 
         writer.addDocument(document);
         writer.commit();
@@ -69,46 +69,35 @@ public class Consumer {
         reader = DirectoryReader.open(memoryIndex);
         searcher = new IndexSearcher(reader);
 
-
         //TODO Fetch all Queries from Database -> Cache Queries
         List<Query> queries = queryRepository.findAll();
         logger.info("received " + queries.size() + " queries");
 
-
         for (Query query : queries) {
-
             org.apache.lucene.search.Query luceneQuery = queryParser.parse(query.toString());
 
             logger.info("Search Query: " + luceneQuery.toString());
-
             //The maximum of hits can only be 1 bcs. there is a maximum of 1 Document in the index
             TopDocs topDocs = searcher.search(luceneQuery, 10);
 
             logger.info("Total hits: " + topDocs.totalHits);
 
             if (topDocs.totalHits == 1) {
+                logger.info("Query " + query.getQueryID() + " hit on resource " + resource.getText());
 
-                logger.info("Query " + query.getQueryID() + " hit on ressource " + ressource.getText());
-
-                //Create Mention out of ressource
+                //Create Mention out of resource
                 Mention mention = new Mention();
-
                 mention.setQueryID(query.getQueryID());
-                mention.setAuthor(ressource.getAuthor());
-                mention.setText(ressource.getText());
-                mention.setDate(ressource.getDate());
+                mention.setAuthor(resource.getAuthor());
+                mention.setText(resource.getText());
+                mention.setDate(resource.getDate());
 
                 logger.info("Generated Mention: " + mention.toString());
-
                 producer.send(mention);
-
             }
         }
-
         writer.deleteAll();
         writer.commit();
-
-
     }
 }
 

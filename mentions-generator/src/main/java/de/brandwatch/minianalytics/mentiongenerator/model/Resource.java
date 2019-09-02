@@ -6,9 +6,8 @@ import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
-public class Ressource {
+public class Resource {
 
     private String author;
     private String text;
@@ -17,7 +16,7 @@ public class Ressource {
     @JsonDeserialize(using = InstantDeserializer.class)
     private Instant date;
 
-    public Ressource() {
+    public Resource() {
     }
 
     public String getAuthor() {
