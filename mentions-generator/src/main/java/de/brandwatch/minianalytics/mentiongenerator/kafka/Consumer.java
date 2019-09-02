@@ -13,12 +13,11 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
-import org.apache.lucene.queryparser.classic.QueryParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,25 +31,24 @@ public class Consumer {
     private static final Logger logger = LoggerFactory.getLogger(Consumer.class);
 
     @Autowired
-    QueryRepository queryRepository;
+    private QueryRepository queryRepository;
 
     @Autowired
-    Producer producer;
+    private Producer producer;
 
-    Directory memoryIndex = new RAMDirectory();
-    StandardAnalyzer analyzer = new StandardAnalyzer();
+    private Directory memoryIndex = new RAMDirectory();
+    private StandardAnalyzer analyzer = new StandardAnalyzer();
 
-    IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
-    IndexWriter writer = new IndexWriter(memoryIndex, indexWriterConfig);
+    private IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+    private IndexWriter writer = new IndexWriter(memoryIndex, indexWriterConfig);
 
-    IndexSearcher searcher;
-    IndexReader reader;
+    private IndexSearcher searcher;
+    private IndexReader reader;
 
-    QueryParser queryParser = new QueryParser("text", analyzer);
+    private QueryParser queryParser = new QueryParser("text", analyzer);
 
     public Consumer() throws IOException {
     }
-
 
     @KafkaListener(topics = "twitter")
     public void receive(Ressource ressource) throws ParseException, IOException {
