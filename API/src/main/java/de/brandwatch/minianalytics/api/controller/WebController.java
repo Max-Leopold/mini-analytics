@@ -12,7 +12,7 @@ public class WebController {
     private static final Logger logger = LoggerFactory.getLogger(WebController.class);
 
     @GetMapping(value = "/index")
-    public String index(){
+    public String index() {
         return "index";
     }
 }

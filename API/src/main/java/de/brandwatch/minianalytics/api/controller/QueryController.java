@@ -23,31 +23,31 @@ public class QueryController {
     }
 
     @PostMapping(value = "/queries")
-    public ResponseEntity query(@RequestParam String query){
+    public ResponseEntity query(@RequestParam String query) {
         try {
             logger.info("POST /queries: {}", query);
             return ResponseEntity.status(200).body(queryService.createQuery(query));
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "", e);
         }
     }
 
     @GetMapping(value = "/queries")
-    public ResponseEntity queries(){
-        try{
+    public ResponseEntity queries() {
+        try {
             logger.info("GET /queries");
             return ResponseEntity.status(200).body(queryService.getAllQueries());
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "", e);
         }
     }
 
     @GetMapping(value = "/queries/{queryID}")
-    public ResponseEntity singleQuery(@PathVariable("queryID") String queryID){
-        try{
+    public ResponseEntity singleQuery(@PathVariable("queryID") String queryID) {
+        try {
             logger.info("GET /queries/" + queryID);
             return ResponseEntity.status(200).body(queryService.getQueryByID(queryID));
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "", e);
         }
     }
