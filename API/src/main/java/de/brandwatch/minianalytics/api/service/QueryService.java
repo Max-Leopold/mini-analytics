@@ -1,7 +1,5 @@
 package de.brandwatch.minianalytics.api.service;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import de.brandwatch.minianalytics.api.postgres.model.Query;
 import de.brandwatch.minianalytics.api.postgres.repository.QueryRepository;
 import org.slf4j.Logger;
@@ -16,8 +14,6 @@ import java.util.Optional;
 public class QueryService {
 
     private static final Logger logger = LoggerFactory.getLogger(QueryService.class);
-
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private final QueryRepository queryRepository;
 

@@ -1,4 +1,4 @@
-package de.brandwatch.minianalytics.queryinput.solr.config;
+package de.brandwatch.minianalytics.api.solr.config;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -10,7 +10,7 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 
 @Configuration
 @EnableSolrRepositories(
-        basePackages = "de.brandwatch.minianalytics.queryinput.solr.repository"
+        basePackages = "de.brandwatch.minianalytics.api.solr.repository"
 )
 public class SolrConfig {
 

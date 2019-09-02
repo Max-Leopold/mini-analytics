@@ -1,4 +1,4 @@
-package de.brandwatch.minianalytics.queryinput.solr.model;
+package de.brandwatch.minianalytics.api.solr.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
