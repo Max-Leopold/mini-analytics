@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import de.brandwatch.minianalytics.api.security.model.User;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "queries")
@@ -52,6 +53,19 @@ public class Query {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Query)) return false;
+        Query query1 = (Query) o;
+        return query.equals(query1.query);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(query);
     }
 
     @Override
