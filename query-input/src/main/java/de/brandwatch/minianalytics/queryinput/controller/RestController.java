@@ -45,7 +45,7 @@ public class RestController {
 
             logger.info("queryID: *?0* AND date: *?1*");
 
-            return ResponseEntity.status(200).body(mentionRepository.findMentionsAfterDate(Long.parseLong(queryID), date));
+            return ResponseEntity.status(200).body(mentionRepository.findMentionsAfterDate(Long.parseLong(queryID), dateBounds));
         }
 
         return ResponseEntity.status(200).body(mentions);
