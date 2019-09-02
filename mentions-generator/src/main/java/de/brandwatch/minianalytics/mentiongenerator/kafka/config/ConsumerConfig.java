@@ -2,9 +2,8 @@ package de.brandwatch.minianalytics.mentiongenerator.kafka.config;
 
 
 import de.brandwatch.minianalytics.mentiongenerator.kafka.Consumer;
-import de.brandwatch.minianalytics.mentiongenerator.kafka.Producer;
 import de.brandwatch.minianalytics.mentiongenerator.model.Resource;
-import de.brandwatch.minianalytics.mentiongenerator.postgres.repository.QueryRepository;
+import de.brandwatch.minianalytics.mentiongenerator.service.LuceneService;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +16,6 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,7 +56,7 @@ public class ConsumerConfig {
     }
 
     @Bean
-    public Consumer consumer(QueryRepository queryRepository, Producer producer) throws IOException {
-        return new Consumer(queryRepository, producer);
+    public Consumer consumer(LuceneService luceneService) {
+        return new Consumer(luceneService);
     }
 }
