@@ -42,7 +42,7 @@ public class MentionService {
             String convertedDate = startDate + " 00:00:00";
             TemporalAccessor temporalAccessor = formatter.parse(convertedDate);
             LocalDateTime localDateTime = LocalDateTime.from(temporalAccessor);
-            ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
+            ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.of("UTC"));
             Instant instant = Instant.from(zonedDateTime);
 
             sb.append(instant);
