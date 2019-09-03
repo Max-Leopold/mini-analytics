@@ -30,15 +30,15 @@ public class Consumer {
 
     private static final Logger logger = LoggerFactory.getLogger(Consumer.class);
 
-    private QueryRepository queryRepository;
+    private final QueryRepository queryRepository;
 
-    private Producer producer;
+    private final Producer producer;
 
-    private Directory memoryIndex = new RAMDirectory();
-    private StandardAnalyzer analyzer = new StandardAnalyzer();
+    private final Directory memoryIndex = new RAMDirectory();
+    private final StandardAnalyzer analyzer = new StandardAnalyzer();
 
-    private IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
-    private IndexWriter writer = new IndexWriter(memoryIndex, indexWriterConfig);
+    private final IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+    private final IndexWriter writer = new IndexWriter(memoryIndex, indexWriterConfig);
 
     private IndexSearcher searcher;
     private IndexReader reader;
@@ -51,7 +51,7 @@ public class Consumer {
         this.producer = producer;
     }
 
-    @KafkaListener(topics = "twitter")
+    @KafkaListener(topics = "resources")
     public void receive(Resource resource) throws ParseException, IOException {
         logger.info("received message='{}'", resource.toString());
 
