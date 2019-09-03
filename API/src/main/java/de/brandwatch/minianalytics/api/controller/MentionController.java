@@ -36,7 +36,9 @@ public class MentionController {
     }
 
     @GetMapping(value = "/mentions/{queryID}")
-    public ResponseEntity findMentionsFromQuery(@PathVariable String queryID, @RequestParam(value = "date", defaultValue = "") String date){
+    public ResponseEntity findMentionsFromQuery(
+            @PathVariable String queryID,
+            @RequestParam(value = "date", defaultValue = "") String date){
 
         logger.info("GET /mentions/" + queryID);
 
@@ -55,7 +57,8 @@ public class MentionController {
 
             logger.info("queryID: *?0* AND date: *?1*");
 
-            return ResponseEntity.status(200).body(gson.toJson(mentionRepository.findMentionsAfterDate(Long.parseLong(queryID), dateBounds)));
+            return ResponseEntity.status(200).body(gson.toJson(mentionRepository.findMentionsAfterDate(
+                    Long.parseLong(queryID), dateBounds)));
         }
         return ResponseEntity.status(200).body(gson.toJson(mentions));
     }
