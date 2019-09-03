@@ -29,9 +29,12 @@ public class MentionController {
     }
 
     @GetMapping(value = "/mentions/{queryID}")
-    public ResponseEntity findMentionsFromQuery(@PathVariable String queryID, @RequestParam(value = "date", defaultValue = "") String date) {
+    public ResponseEntity findMentionsFromQuery(
+            @PathVariable String queryID,
+            @RequestParam(value = "startDate", defaultValue = "") String startDate,
+            @RequestParam(value = "endDate", defaultValue = "") String endDate) {
         try{
-            return ResponseEntity.status(200).body(gson.toJson(mentionService.getMentionsFromQueryID(queryID, date)));
+            return ResponseEntity.status(200).body(gson.toJson(mentionService.getMentionsFromQueryID(queryID, startDate, endDate)));
         } catch (Exception e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "", e);
         }
