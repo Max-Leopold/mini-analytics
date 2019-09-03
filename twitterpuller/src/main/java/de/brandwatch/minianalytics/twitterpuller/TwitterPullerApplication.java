@@ -1,6 +1,5 @@
 package de.brandwatch.minianalytics.twitterpuller;
 
-import de.brandwatch.minianalytics.twitterpuller.twitter.TweetProducer;
 import de.brandwatch.minianalytics.twitterpuller.twitter.TwitterPullerStatusListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,11 +40,6 @@ public class TwitterPullerApplication {
     @Bean
     public Twitter twitter(){
         return TwitterFactory.getSingleton();
-    }
-
-    @Bean(initMethod = "sendTweetsToKafka")
-    public TweetProducer tweetProducer(TwitterStream twitterStream) {
-        return new TweetProducer(twitterStream);
     }
 
     @Bean

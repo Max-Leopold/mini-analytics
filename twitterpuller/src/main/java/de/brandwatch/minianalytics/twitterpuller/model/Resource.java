@@ -17,6 +17,8 @@ public class Resource {
     @JsonDeserialize(using = InstantDeserializer.class)
     private Instant date;
 
+    public Resource() {
+    }
 
     public String getAuthor() {
         return author;
