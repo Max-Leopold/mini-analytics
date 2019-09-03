@@ -30,25 +30,40 @@ public class MentionService {
         this.mentionRepository = mentionRepository;
     }
 
-    public List<Mention> getMentionsFromQueryID(String queryID, String date){
+    public List<Mention> getMentionsFromQueryID(String queryID, String startDate, String endDate) {
 
-        List<Mention> mentions = mentionRepository.findByQueryID(Long.parseLong(queryID));
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        if(!date.equals("")){
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-            String convertedDate = date + " 00:00:00";
+        if (startDate.equals("")) {
+            sb.append("*");
+        } else {
+            String convertedDate = startDate + " 00:00:00";
             TemporalAccessor temporalAccessor = formatter.parse(convertedDate);
             LocalDateTime localDateTime = LocalDateTime.from(temporalAccessor);
             ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
             Instant instant = Instant.from(zonedDateTime);
 
-            String dateBounds = "[" + instant + " TO *]";
-
-            logger.info("queryID: *?0* AND date: *?1*");
-
-            return mentionRepository.findMentionsAfterDate(Long.parseLong(queryID), dateBounds);
+            sb.append(instant);
         }
-        return mentions;
+
+        sb.append(" TO ");
+
+        if(endDate.equals("")){
+            sb.append("*");
+        }else{
+            String convertedDate = endDate + " 00:00:00";
+            TemporalAccessor temporalAccessor = formatter.parse(convertedDate);
+            LocalDateTime localDateTime = LocalDateTime.from(temporalAccessor);
+            ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.of("UTC"));
+            Instant instant = Instant.from(zonedDateTime);
+
+            sb.append(instant);
+        }
+
+        sb.append("]");
+
+        return mentionRepository.findMentionsAfterDate(Long.parseLong(queryID), sb.toString());
     }
 }
