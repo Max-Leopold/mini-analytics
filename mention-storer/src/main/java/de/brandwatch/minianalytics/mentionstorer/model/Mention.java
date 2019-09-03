@@ -24,7 +24,7 @@ public class Mention {
     @Indexed(name = "text", type = "string")
     private String text;
 
-    @Indexed(name = "date", type = "string")
+    @Indexed(name = "date", type = "date")
     @JsonDeserialize(using = InstantDeserializer.class)
     private Instant date;
 
