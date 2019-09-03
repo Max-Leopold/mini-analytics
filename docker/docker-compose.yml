@@ -93,6 +93,18 @@ services:
       - "-c"
       - "exec solr -c -f"
 
+  solr2:
+    image: solr
+    hostname: solr2
+    ports:
+      - "8984:8984"
+    environment:
+      ZK_HOST: zoo1:2181
+    entrypoint:
+      - bash
+      - "-c"
+      - "exec solr -c -f"
+
   create-collection:
     build: .
     hostname: create-collection
