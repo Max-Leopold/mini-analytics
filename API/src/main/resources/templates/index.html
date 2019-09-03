@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="ISO-8859-1"/>
+</head>
+<body>
+Query: <input type="text" size="50" id="createQueryInput">
+<input type="button" value="Create new Query" onclick="getAllQueries()">
+<div id="createQueryDiv"></div>
+<br>
+Query id: <input type="text" size="50" id="getQueryWithIDInput">
+<input type="button" value="Get query" onclick="getQueryWithID()">
+<div id="getQueryWithIDDiv"></div>
+<br>
+<input type="button" value="Get all queries" onclick="getAllQueries()">
+<br>
+<textarea id="getAllQueriesDiv" rows="15" cols="80">
+</textarea>
+</body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    function getAllQueries() {
+        console.log("Send method called");
+        axios.post('http://localhost:8080/queries', null, {
+            params: {
+                query: document.getElementById("createQueryInput").value
+            }
+        }).then(function (response) {
+            console.log(response.data);
+            document.getElementById("createQueryDiv").innerHTML = "<br> Created query: " + response.data;
+        })
+    }
+
+    function getQueryWithID() {
+        console.log("Get Query with ID: " + document.getElementById("getQueryWithIDInput").value);
+
+        axios.get("http://localhost:8080/queries/" + document.getElementById("getQueryWithIDInput").value)
+            .then(function (response) {
+                console.log(response.data.value.query);
+                document.getElementById("getQueryWithIDDiv").innerHTML = "<br> Got query: " + response.data.value.query;
+            })
+    }
+
+    function getAllQueries() {
+        console.log("Get all queries");
+
+        axios.get("http://localhost:8080/queries")
+            .then(function (response) {
+                console.log(response.data);
+                //const jsonObj = JSON.parse(response.data);
+                document.getElementById("getAllQueriesDiv").innerHTML = JSON.stringify(response.data, null, '\t');
+            })
+    }
+</script>
+</html>

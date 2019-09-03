@@ -11,6 +11,7 @@
     <modules>
         <module>mention-storer</module>
         <module>mentions-generator</module>
+        <module>API</module>
         <module>twitterpuller</module>
     </modules>
 
