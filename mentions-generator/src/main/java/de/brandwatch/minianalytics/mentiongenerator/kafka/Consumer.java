@@ -58,8 +58,8 @@ public class Consumer {
         //Create Lucene Document out of Resource
         Document document = new Document();
 
-        document.add(new TextField("author", resource.getAuthor(), Field.Store.YES));
-        document.add(new TextField("text", resource.getText(), Field.Store.YES));
+        document.add(new TextField("author", resource.getAuthor(), Field.Store.NO));
+        document.add(new TextField("text", resource.getText(), Field.Store.NO));
 
         logger.info("Indexed document:\n{\n\tauthor: " + document.get("author") + "\n\ttext: " + document.get("text") + "\n}");
 

@@ -43,11 +43,11 @@ public class ConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, Object> consumerFactory(){
+    public ConsumerFactory<String, Resource> consumerFactory(){
         JsonDeserializer jsonDeserializer = new JsonDeserializer<>(Resource.class, false);
         jsonDeserializer.addTrustedPackages("*");
 
-        return new DefaultKafkaConsumerFactory<String, Object>(consumerConfigs(), new StringDeserializer(), jsonDeserializer);
+        return new DefaultKafkaConsumerFactory<String, Resource>(consumerConfigs(), new StringDeserializer(), jsonDeserializer);
     }
 
     @Bean
