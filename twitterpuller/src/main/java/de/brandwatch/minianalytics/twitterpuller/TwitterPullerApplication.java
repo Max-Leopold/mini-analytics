@@ -2,6 +2,8 @@ package de.brandwatch.minianalytics.twitterpuller;
 
 import de.brandwatch.minianalytics.twitterpuller.twitter.TweetProducer;
 import de.brandwatch.minianalytics.twitterpuller.twitter.TwitterPullerStatusListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.CacheManager;
@@ -20,6 +22,8 @@ import java.time.Instant;
 @EnableScheduling
 @EnableCaching
 public class TwitterPullerApplication {
+
+    private static final Logger logger = LoggerFactory.getLogger(TwitterPullerApplication.class);
 
     public static void main(String[] args) {
         SpringApplication.run(TwitterPullerApplication.class, args);
@@ -42,10 +46,10 @@ public class TwitterPullerApplication {
         return new ConcurrentMapCacheManager("{queryID, query}");
     }
 
-    //Refreh Cache every 10 minutes
+    //Refresh Cache every 10 minutes
     @CacheEvict(allEntries = true, cacheNames = "{queryID, query}")
     @Scheduled(fixedDelay = 10 * 60 * 1000)
     public void reportCacheEvict() {
-        System.out.println("Flush Cache " + Instant.now());
+        logger.info("Flush Cache " + Instant.now());
     }
 }

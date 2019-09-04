@@ -3,51 +3,60 @@ package de.brandwatch.minianalytics.twitterpuller.twitter;
 import de.brandwatch.minianalytics.twitterpuller.kafka.Producer;
 import de.brandwatch.minianalytics.twitterpuller.model.Resource;
 import de.brandwatch.minianalytics.twitterpuller.postgres.cache.QueryCache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import twitter4j.*;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 
 @Component
 public class TweetSearcher {
 
-    @Autowired
-    QueryCache queryCache;
+    private static final Logger logger = LoggerFactory.getLogger(TweetSearcher.class);
+
+    private final QueryCache queryCache;
+
+    private final Producer producer;
 
     @Autowired
-    Producer producer;
+    public TweetSearcher(QueryCache queryCache, Producer producer) {
+        this.queryCache = queryCache;
+        this.producer = producer;
+    }
 
     private static final Twitter twitter = TwitterFactory.getSingleton();
 
     @Scheduled(fixedDelay = 1000)
     public void searchTweets(){
+        queryCache.getCachedQueries().forEach(this::search);
+    }
 
-        queryCache.getCachedQueries().forEach(query -> {
-            try {
-                Query searchQuery = new Query(query.getQuery());
-                searchQuery.setCount(100);
+    private void search(de.brandwatch.minianalytics.twitterpuller.postgres.model.Query query){
+        try {
+            Query searchQuery = new Query(query.getQuery());
+            searchQuery.setCount(100);
 
-                QueryResult queryResult = twitter.search(searchQuery);
+            QueryResult queryResult = twitter.search(searchQuery);
 
-                queryResult.getTweets().forEach(tweet -> {
+            queryResult.getTweets().stream()
+                    .map(this::mapToResource)
+                    .forEach(producer::send);
 
-                    Instant date = new Timestamp(tweet.getCreatedAt().getTime()).toInstant();
+        } catch (TwitterException e) {
+            logger.warn(e.getErrorMessage());
+        }
+    }
 
-                    Resource resource = new Resource();
-                    resource.setDate(date);
-                    resource.setText(tweet.getText());
-                    resource.setAuthor(tweet.getUser().getName());
+    private Resource mapToResource(Status tweet) {
+        Instant date = Instant.ofEpochMilli(tweet.getCreatedAt().getTime());
 
-                    //Post mention into Kafka Topic
-                    producer.send(resource);
-                });
-            } catch (TwitterException e) {
-                e.printStackTrace();
-            }
-
-        });
+        Resource resource = new Resource();
+        resource.setDate(date);
+        resource.setText(tweet.getText());
+        resource.setAuthor(tweet.getUser().getName());
+        return resource;
     }
 }
