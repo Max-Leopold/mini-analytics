@@ -92,6 +92,8 @@ services:
       - bash
       - "-c"
       - "exec solr -c -f"
+    volumes:
+      - solr:/var/lib/solr/data
 
   solr2:
     image: solr
@@ -104,6 +106,8 @@ services:
       - bash
       - "-c"
       - "exec solr -c -f"
+    volumes:
+      - solr2:/var/lib/solr2/data
 
   create-collection:
     build: .
@@ -119,4 +123,5 @@ volumes:
   zookeeper:
   postgres:
   solr:
+  solr2:
 
