@@ -12,8 +12,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,10 +38,10 @@ public class MentionServiceTest {
         List<Mention> mentionList = new ArrayList<>();
         mentionList.add(mention);
 
-        when(mentionRepository.findByQueryID(1L)).thenReturn(mentionList);
+        when(mentionRepository.findMentionsAfterDate(1L, "[* TO *]")).thenReturn(mentionList);
 
-        assertThat(mentionList, is(equalTo(mentionService.getMentionsFromQueryID("1", ""))));
-        verify(mentionRepository, times(1)).findByQueryID(1L);
+        assertThat(mentionList, is(equalTo(mentionService.getMentionsFromQueryID("1", "", ""))));
+        verify(mentionRepository, times(1)).findMentionsAfterDate(1L, "[* TO *]");
 
     }
 
@@ -58,7 +59,7 @@ public class MentionServiceTest {
         String dateBounds = "[2019-09-01T00:00:00Z TO *]";
         when(mentionRepository.findMentionsAfterDate(1L, dateBounds)).thenReturn(mentionList);
 
-        assertThat(mentionList, is(equalTo(mentionService.getMentionsFromQueryID("1", "2019-09-01"))));
+        assertThat(mentionList, is(equalTo(mentionService.getMentionsFromQueryID("1", "2019-09-01", ""))));
         verify(mentionRepository, times(1)).findMentionsAfterDate(1L, dateBounds);
     }
 }
