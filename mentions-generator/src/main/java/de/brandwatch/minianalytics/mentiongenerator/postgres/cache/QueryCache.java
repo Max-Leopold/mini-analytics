@@ -11,8 +11,12 @@ import java.util.List;
 @Component
 public class QueryCache {
 
+    private final QueryRepository queryRepository;
+
     @Autowired
-    QueryRepository queryRepository;
+    public QueryCache(QueryRepository queryRepository) {
+        this.queryRepository = queryRepository;
+    }
 
     @Cacheable("{queryID, query}")
     public List<Query> getCachedQueries(){

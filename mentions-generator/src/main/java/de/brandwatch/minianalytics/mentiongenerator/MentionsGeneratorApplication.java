@@ -1,5 +1,9 @@
 package de.brandwatch.minianalytics.mentiongenerator;
 
+import de.brandwatch.minianalytics.mentiongenerator.kafka.Producer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.CacheManager;
@@ -10,7 +14,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import javax.annotation.PostConstruct;
 import java.time.Instant;
 
 @SpringBootApplication
@@ -18,30 +21,29 @@ import java.time.Instant;
 @EnableScheduling
 public class MentionsGeneratorApplication {
 
+    private static final Logger logger = LoggerFactory.getLogger(MentionsGeneratorApplication.class);
+
     public static void main(String[] args) {
         SpringApplication.run(MentionsGeneratorApplication.class, args);
     }
 
-    @Autowired
     private Producer producer;
 
-    @PostConstruct
-    public void sendMessagesOnKafka() {
-        producer.send("Waz up?");
+    @Autowired
+    public MentionsGeneratorApplication(Producer producer){
+        this.producer = producer;
     }
 
     @Bean
     public CacheManager cacheManager() {
-        ConcurrentMapCacheManager cacheManager = new ConcurrentMapCacheManager("{queryID, query}");
-
-        return cacheManager;
+        return new ConcurrentMapCacheManager("{queryID, query}");
     }
 
     //Refreh Cache every 10 minutes
     @CacheEvict(allEntries = true, cacheNames = "{queryID, query}")
     @Scheduled(fixedDelay = 10 * 60 * 1000)
     public void reportCacheEvict() {
-        System.out.println("Flush Cache " + Instant.now());
+        logger.info("Flush Cache " + Instant.now());
     }
 }
 
