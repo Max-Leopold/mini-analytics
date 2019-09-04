@@ -21,13 +21,15 @@ public class TweetSearcher {
 
     private final Producer producer;
 
+    private final Twitter twitter;
+
     @Autowired
-    public TweetSearcher(QueryCache queryCache, Producer producer) {
+    public TweetSearcher(QueryCache queryCache, Producer producer, Twitter twitter) {
         this.queryCache = queryCache;
         this.producer = producer;
+        this.twitter = twitter;
     }
 
-    private static final Twitter twitter = TwitterFactory.getSingleton();
 
     @Scheduled(fixedDelay = 1000)
     public void searchTweets(){

@@ -13,6 +13,8 @@ import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import twitter4j.Twitter;
+import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 
@@ -34,6 +36,11 @@ public class TwitterPullerApplication {
         TwitterStream twitterStream = TwitterStreamFactory.getSingleton();
         twitterStream.addListener(listener);
         return twitterStream;
+    }
+
+    @Bean
+    public Twitter twitter(){
+        return TwitterFactory.getSingleton();
     }
 
     @Bean(initMethod = "sendTweetsToKafka")
