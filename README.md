@@ -1,12 +1,12 @@
 # Mini Analytics [![Build Status](https://travis-ci.com/Max-Leopold/mini-analytics.svg?branch=master)](https://travis-ci.com/Max-Leopold/mini-analytics)
 
-Mini Analytics is a small scaled project i've did as an internship introduction project.
+Mini Analytics is a small scale project I've done as an internship introduction project.
 
-This project can be used to search twitter for user written lucene queries.
+This project can be used to search Twitter for user written Lucene queries.
 
 ## Installation
 
-To install this project on your system you need [Maven](https://maven.apache.org/download.cgi), [Docker](https://docs.docker.com/docker-for-windows/install/) and a [Twitter Developer Account](https://developer.twitter.com/en/apply-for-access.html).
+To install this project on your system you need [Maven](https://maven.apache.org/download.cgi), [Docker](https://www.docker.com/get-started) and a [Twitter Developer Account](https://developer.twitter.com/en/apply-for-access.html).
 
 To download the project just use `git clone https://github.com/Max-Leopold/mini-analytics.git` to clone the project onto your machine.
 
@@ -21,7 +21,7 @@ You can find more information about configuration [here](http://twitter4j.org/en
 
 ## Running
 
-To run the project navigate to your project directory and use the command `mvn install` in your command line interface. 
+To run the project navigate to your project directory and use the command `mvn package` in your command line interface. 
 
 Now navigate to the `mini-analytics/Docker` directory and start the application with the command `docker-compose up --build`.
 
