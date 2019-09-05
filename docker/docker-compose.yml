@@ -81,9 +81,9 @@ services:
     volumes:
       - postgres:/var/lib/postgres/data
 
-  solr:
+  solr1:
     image: solr
-    hostname: solr
+    hostname: solr1
     ports:
       - "8983:8983"
     environment:
@@ -93,7 +93,7 @@ services:
       - "-c"
       - "exec solr -c -f"
     volumes:
-      - solr:/var/lib/solr/data
+      - solr1:/var/lib/solr/data
 
   solr2:
     image: solr
@@ -113,7 +113,7 @@ services:
     build: .
     hostname: create-collection
     environment:
-      WAIT_HOSTS: solr:8983
+      WAIT_HOSTS: solr1:8983
       WAIT_HOSTS_TIMEOUT: 60
 
 volumes:
@@ -122,6 +122,6 @@ volumes:
   kafka3:
   zookeeper:
   postgres:
-  solr:
+  solr1:
   solr2:
 

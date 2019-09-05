@@ -3,7 +3,7 @@ import json
 
 payload = ""
 
-conn = http.client.HTTPConnection("solr:8983")
+conn = http.client.HTTPConnection("solr1:8983")
 
 conn.request("GET", "/solr/admin/collections?action=LIST&wt=json", payload)
 
