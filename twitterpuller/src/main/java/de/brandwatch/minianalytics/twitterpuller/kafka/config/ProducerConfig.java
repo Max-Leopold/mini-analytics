@@ -24,7 +24,7 @@ public class ProducerConfig {
     @Bean
     public Map<String, Object> producerConfigs(){
 
-        Map<String, Object> producerConfig = new HashMap<String, Object>();
+        Map<String, Object> producerConfig = new HashMap<>();
 
         producerConfig.put(org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         producerConfig.put(org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
