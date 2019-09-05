@@ -43,7 +43,7 @@ public class Consumer {
     private IndexSearcher searcher;
     private IndexReader reader;
 
-    private QueryParser queryParser = new QueryParser("text", analyzer);
+    private final QueryParser queryParser = new QueryParser("text", analyzer);
 
     @Autowired
     public Consumer(QueryRepository queryRepository, Producer producer) throws IOException {
