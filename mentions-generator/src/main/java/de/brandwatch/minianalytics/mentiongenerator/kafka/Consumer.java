@@ -9,12 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 
 public class Consumer {
 
     private static final Logger logger = LoggerFactory.getLogger(Consumer.class);
 
     private final LuceneService luceneService;
+
+    private CountDownLatch countDownLatch = new CountDownLatch(1);
 
     @Autowired
     public Consumer(LuceneService luceneService) {
@@ -24,8 +27,12 @@ public class Consumer {
     @KafkaListener(topics = "resources")
     public void receive(Resource resource) throws ParseException, IOException {
         logger.info("received message='{}'", resource.toString());
-
+        countDownLatch.countDown();
         luceneService.indexResource(resource);
+    }
+
+    public CountDownLatch getCountDownLatch() {
+        return countDownLatch;
     }
 }
 

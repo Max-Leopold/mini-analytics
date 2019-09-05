@@ -2,8 +2,8 @@ package de.brandwatch.minianalytics.mentiongenerator.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
+import de.brandwatch.minianalytics.mentiongenerator.model.deserializer.DefaultInstantDeserializer;
 
 import java.time.Instant;
 
@@ -13,7 +13,8 @@ public class Resource {
     private String text;
 
     @JsonSerialize(using = InstantSerializer.class)
-    @JsonDeserialize(using = InstantDeserializer.class)
+    //Needed bcs. InstantDeserializer doesn't have a no arg. constructor
+    @JsonDeserialize(using = DefaultInstantDeserializer.class)
     private Instant date;
 
     public Resource() {

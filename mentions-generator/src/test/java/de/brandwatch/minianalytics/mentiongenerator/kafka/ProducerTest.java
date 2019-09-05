@@ -63,6 +63,9 @@ public class ProducerTest {
     @Test
     public void testKafkaProducer(){
 
+        kafkaContainer.start();
+        postgreSQLContainer.start();
+
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(
                 ImmutableMap.of(
                         ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaContainer.getBootstrapServers(),
@@ -104,6 +107,9 @@ public class ProducerTest {
             });
             return true;
         });
+
+        kafkaContainer.close();
+        postgreSQLContainer.close();
     }
 
 }
