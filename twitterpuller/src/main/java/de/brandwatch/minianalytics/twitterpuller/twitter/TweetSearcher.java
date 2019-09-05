@@ -48,7 +48,7 @@ public class TweetSearcher {
                     .forEach(producer::send);
 
         } catch (TwitterException e) {
-            logger.warn(e.getErrorMessage());
+            logger.error(e.getErrorMessage());
         }
     }
 
