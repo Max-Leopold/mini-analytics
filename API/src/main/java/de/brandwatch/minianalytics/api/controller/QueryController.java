@@ -1,5 +1,6 @@
 package de.brandwatch.minianalytics.api.controller;
 
+import com.google.gson.Gson;
 import de.brandwatch.minianalytics.api.service.QueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,8 @@ public class QueryController {
 
     private static final Logger logger = LoggerFactory.getLogger(QueryController.class);
 
+    private static final Gson gson = new Gson();
+
     private QueryService queryService;
 
     @Autowired
@@ -26,7 +29,7 @@ public class QueryController {
     public ResponseEntity query(@RequestParam String query) {
         try {
             logger.info("POST /queries: {}", query);
-            return ResponseEntity.status(200).body(queryService.createQuery(query));
+            return ResponseEntity.status(200).body(gson.toJson(queryService.createQuery(query)));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "", e);
         }
@@ -36,7 +39,7 @@ public class QueryController {
     public ResponseEntity queries() {
         try {
             logger.info("GET /queries");
-            return ResponseEntity.status(200).body(queryService.getAllQueries());
+            return ResponseEntity.status(200).body(gson.toJson(queryService.getAllQueries()));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "", e);
         }
@@ -46,7 +49,8 @@ public class QueryController {
     public ResponseEntity singleQuery(@PathVariable("queryID") String queryID) {
         try {
             logger.info("GET /queries/" + queryID);
-            return ResponseEntity.status(200).body(queryService.getQueryByID(queryID));
+            logger.info(queryService.getQueryByID(queryID).toString());
+            return ResponseEntity.status(200).body(gson.toJson(queryService.getQueryByID(queryID)));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "", e);
         }

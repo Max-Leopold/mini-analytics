@@ -20,4 +20,12 @@ public class Query {
 
     public Query() {
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\n\tqueryID: " + queryID +
+                "\n\tquery: " + query +
+                "\n}";
+    }
 }

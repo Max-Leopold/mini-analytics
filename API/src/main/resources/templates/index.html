@@ -5,51 +5,72 @@
 </head>
 <body>
 Query: <input type="text" size="50" id="createQueryInput">
-<input type="button" value="Create new Query" onclick="getAllQueries()">
+<input type="button" value="Create new Query" onclick="createQuery()">
 <div id="createQueryDiv"></div>
 <br>
 Query id: <input type="text" size="50" id="getQueryWithIDInput">
-<input type="button" value="Get query" onclick="getQueryWithID()">
+<input type="button" value="Get query" onclick="getQueryByID()">
 <div id="getQueryWithIDDiv"></div>
 <br>
 <input type="button" value="Get all queries" onclick="getAllQueries()">
 <br>
+<br>
 <textarea id="getAllQueriesDiv" rows="15" cols="80">
+</textarea>
+<br>
+Get all Mentions from Query with ID: <input type="text" id="getMentionsFromQueryIDInput">
+<input type="button" onclick="getMentionsFromQuery()" value="Get Mentions">
+<br>
+<br>
+From Date (Optional): <input type="date" id="datePickerFrom">
+<br>
+<br>
+<textarea id="getMentionsFromQueryDiv" rows="15" cols="80">
 </textarea>
 </body>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-    function getAllQueries() {
-        console.log("Send method called");
+    function createQuery() {
+        console.log("createQuery called");
         axios.post('http://localhost:8080/queries', null, {
             params: {
                 query: document.getElementById("createQueryInput").value
             }
         }).then(function (response) {
             console.log(response.data);
-            document.getElementById("createQueryDiv").innerHTML = "<br> Created query: " + response.data;
+            document.getElementById("createQueryDiv").innerHTML = "<br> Created query: " + response.data.value.query;
         })
     }
 
-    function getQueryWithID() {
-        console.log("Get Query with ID: " + document.getElementById("getQueryWithIDInput").value);
-
-        axios.get("http://localhost:8080/queries/" + document.getElementById("getQueryWithIDInput").value)
+    function getQueryByID() {
+        console.log("getQueryByID");
+        axios.get('http://localhost:8080/queries/' + document.getElementById("getQueryWithIDInput").value)
             .then(function (response) {
                 console.log(response.data.value.query);
-                document.getElementById("getQueryWithIDDiv").innerHTML = "<br> Got query: " + response.data.value.query;
+                document.getElementById("getQueryWithIDDiv").innerHTML = "<br> Got query (id: " + response.data.value.queryID + "): " + response.data.value.query + " ";
             })
     }
 
     function getAllQueries() {
-        console.log("Get all queries");
-
-        axios.get("http://localhost:8080/queries")
+        console.log("getAllQueries");
+        axios.get('http://localhost:8080/queries')
             .then(function (response) {
                 console.log(response.data);
-                //const jsonObj = JSON.parse(response.data);
-                document.getElementById("getAllQueriesDiv").innerHTML = JSON.stringify(response.data, null, '\t');
+                var json = JSON.stringify(response.data, null, 2);
+                document.getElementById("getAllQueriesDiv").innerHTML = json;
             })
+    }
+
+    function getMentionsFromQuery() {
+        console.log("getMentionsFromQuery")
+        axios.get('http://localhost:8080/mentions/' + document.getElementById("getMentionsFromQueryIDInput").value, {
+            params: {
+                date: document.getElementById("datePickerFrom").value
+            }
+        }).then(function (response) {
+            var json = JSON.stringify(response.data, null, 2);
+            document.getElementById("getMentionsFromQueryDiv").innerHTML = json;
+        })
     }
 </script>
 </html>
