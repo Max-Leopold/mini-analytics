@@ -8,10 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
@@ -34,36 +31,44 @@ public class MentionService {
 
         StringBuilder sb = new StringBuilder();
         sb.append("[");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        if(!endDate.equals("") && !startDate.equals("")){
+            if(!validateDates(convertStringDateToInstant(startDate), convertStringDateToInstant(endDate))){
+                throw new DateTimeException("Dates are not in the right order");
+            }
+        }
 
         if (startDate.equals("")) {
             sb.append("*");
         } else {
-            String convertedDate = startDate + " 00:00:00";
-            TemporalAccessor temporalAccessor = formatter.parse(convertedDate);
-            LocalDateTime localDateTime = LocalDateTime.from(temporalAccessor);
-            ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
-            Instant instant = Instant.from(zonedDateTime);
-
-            sb.append(instant);
+            sb.append(convertStringDateToInstant(startDate));
         }
 
         sb.append(" TO ");
 
-        if(endDate.equals("")){
+        if (endDate.equals("")) {
             sb.append("*");
-        }else{
-            String convertedDate = endDate + " 00:00:00";
-            TemporalAccessor temporalAccessor = formatter.parse(convertedDate);
-            LocalDateTime localDateTime = LocalDateTime.from(temporalAccessor);
-            ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.of("UTC"));
-            Instant instant = Instant.from(zonedDateTime);
-
-            sb.append(instant);
+        } else {
+            sb.append(convertStringDateToInstant(endDate));
         }
 
         sb.append("]");
 
         return mentionRepository.findMentionsAfterDate(Long.parseLong(queryID), sb.toString());
+    }
+
+    private Instant convertStringDateToInstant(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String convertedDate = date + " 00:00:00";
+        TemporalAccessor temporalAccessor = formatter.parse(convertedDate);
+        LocalDateTime localDateTime = LocalDateTime.from(temporalAccessor);
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.of("UTC"));
+
+        return Instant.from(zonedDateTime);
+    }
+
+
+    private boolean validateDates(Instant startDate, Instant endDate) {
+        return !startDate.isAfter(endDate);
     }
 }

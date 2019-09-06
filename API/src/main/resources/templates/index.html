@@ -23,6 +23,7 @@ Get all Mentions from Query with ID: <input type="text" id="getMentionsFromQuery
 <br>
 <br>
 From Date (Optional): <input type="date" id="datePickerFrom">
+To Date (Optional): <input type="date" id="datePickerTo">
 <br>
 <br>
 <textarea id="getMentionsFromQueryDiv" rows="15" cols="80">
@@ -65,7 +66,8 @@ From Date (Optional): <input type="date" id="datePickerFrom">
         console.log("getMentionsFromQuery")
         axios.get('http://localhost:8080/mentions/' + document.getElementById("getMentionsFromQueryIDInput").value, {
             params: {
-                date: document.getElementById("datePickerFrom").value
+                startDate: document.getElementById("datePickerFrom").value,
+                endDate: document.getElementById("datePickerTo").value
             }
         }).then(function (response) {
             var json = JSON.stringify(response.data, null, 2);
