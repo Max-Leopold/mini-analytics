@@ -1,7 +1,7 @@
 package de.brandwatch.minianalytics.twitterpuller.twitter;
 
+import de.brandwatch.minianalytics.library.model.Resource;
 import de.brandwatch.minianalytics.twitterpuller.kafka.Producer;
-import de.brandwatch.minianalytics.twitterpuller.model.Resource;
 import de.brandwatch.minianalytics.twitterpuller.postgres.cache.QueryCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ public class TweetSearcher {
         queryCache.getCachedQueries().forEach(this::search);
     }
 
-    private void search(de.brandwatch.minianalytics.twitterpuller.postgres.model.Query query){
+    private void search(de.brandwatch.minianalytics.library.postgres.model.Query query){
         try {
             Query searchQuery = new Query(query.getQuery());
             searchQuery.setCount(100);

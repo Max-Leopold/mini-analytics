@@ -1,6 +1,6 @@
 package de.brandwatch.minianalytics.twitterpuller.kafka;
 
-import de.brandwatch.minianalytics.twitterpuller.model.Resource;
+import de.brandwatch.minianalytics.library.model.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

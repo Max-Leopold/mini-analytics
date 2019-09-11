@@ -1,8 +1,8 @@
 package de.brandwatch.minianalytics.twitterpuller.kafka.config;
 
 
+import de.brandwatch.minianalytics.library.model.Resource;
 import de.brandwatch.minianalytics.twitterpuller.kafka.Producer;
-import de.brandwatch.minianalytics.twitterpuller.model.Resource;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

@@ -1,7 +1,7 @@
 package de.brandwatch.minianalytics.twitterpuller.twitter;
 
+import de.brandwatch.minianalytics.library.model.Resource;
 import de.brandwatch.minianalytics.twitterpuller.kafka.Producer;
-import de.brandwatch.minianalytics.twitterpuller.model.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import twitter4j.StallWarning;

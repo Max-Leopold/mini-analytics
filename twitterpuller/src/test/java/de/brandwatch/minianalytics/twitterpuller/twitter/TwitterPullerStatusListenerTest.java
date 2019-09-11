@@ -1,8 +1,8 @@
 package de.brandwatch.minianalytics.twitterpuller.twitter;
 
 
+import de.brandwatch.minianalytics.library.model.Resource;
 import de.brandwatch.minianalytics.twitterpuller.kafka.Producer;
-import de.brandwatch.minianalytics.twitterpuller.model.Resource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

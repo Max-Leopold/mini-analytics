@@ -1,4 +1,4 @@
-package de.brandwatch.minianalytics.twitterpuller.postgres.model;
+package de.brandwatch.minianalytics.library.postgres.model;
 
 import javax.persistence.*;
 
@@ -21,15 +21,19 @@ public class Query {
     public Query() {
     }
 
+    public long getQueryID() {
+        return queryID;
+    }
+
     public String getQuery() {
         return query;
     }
 
     @Override
     public String toString() {
-        return "{\n" +
-                "\tqueryID: " + queryID + "\n" +
-                "\tquery: " + query + "\n" +
-                "}";
+        return "{" +
+                "\n\tqueryID: " + queryID +
+                "\n\tquery: " + query +
+                "\n}";
     }
 }

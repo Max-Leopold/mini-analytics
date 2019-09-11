@@ -1,7 +1,7 @@
 package de.brandwatch.minianalytics.api.service;
 
-import de.brandwatch.minianalytics.api.postgres.model.Query;
-import de.brandwatch.minianalytics.api.postgres.repository.QueryRepository;
+import de.brandwatch.minianalytics.library.postgres.model.Query;
+import de.brandwatch.minianalytics.library.postgres.repository.QueryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

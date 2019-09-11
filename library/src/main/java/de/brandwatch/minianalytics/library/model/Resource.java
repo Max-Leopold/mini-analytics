@@ -1,4 +1,4 @@
-package de.brandwatch.minianalytics.mentiongenerator.model;
+package de.brandwatch.minianalytics.library.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -6,10 +6,9 @@ import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
 
 import java.time.Instant;
+import java.util.Objects;
 
-public class Mention {
-
-    private long queryID;
+public class Resource {
 
     private String author;
     private String text;
@@ -18,7 +17,7 @@ public class Mention {
     @JsonDeserialize(using = InstantDeserializer.class)
     private Instant date;
 
-    public Mention() {
+    public Resource() {
     }
 
     public String getAuthor() {
@@ -45,21 +44,27 @@ public class Mention {
         this.date = date;
     }
 
-    public long getQueryID() {
-        return queryID;
-    }
-
-    public void setQueryID(long queryID) {
-        this.queryID = queryID;
-    }
-
     @Override
     public String toString() {
         return "{\n" +
-                "\tqueryID: " + getQueryID() + "\n" +
                 "\tauthor: " + getAuthor() + "\n" +
                 "\ttext: " + getText() + "\n" +
                 "\tdate: " + getDate().toString() + "\n" +
                 "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Resource)) return false;
+        Resource resource = (Resource) o;
+        return Objects.equals(getAuthor(), resource.getAuthor()) &&
+                Objects.equals(getText(), resource.getText()) &&
+                Objects.equals(getDate(), resource.getDate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getAuthor(), getText(), getDate());
     }
 }

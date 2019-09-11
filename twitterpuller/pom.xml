@@ -55,6 +55,10 @@
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>de.brandwatch.minianalytics</groupId>
+            <artifactId>library</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

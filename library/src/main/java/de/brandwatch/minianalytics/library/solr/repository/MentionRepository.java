@@ -1,6 +1,6 @@
-package de.brandwatch.minianalytics.api.solr.repository;
+package de.brandwatch.minianalytics.library.solr.repository;
 
-import de.brandwatch.minianalytics.api.solr.model.Mention;
+import de.brandwatch.minianalytics.library.solr.model.Mention;
 import org.springframework.data.solr.repository.Query;
 import org.springframework.data.solr.repository.SolrCrudRepository;
 
