@@ -1,10 +1,10 @@
 package de.brandwatch.minianalytics.mentiongenerator.kafka.config;
 
 
+import de.brandwatch.minianalytics.library.model.Resource;
+import de.brandwatch.minianalytics.library.postgres.repository.QueryRepository;
 import de.brandwatch.minianalytics.mentiongenerator.kafka.Consumer;
 import de.brandwatch.minianalytics.mentiongenerator.kafka.Producer;
-import de.brandwatch.minianalytics.mentiongenerator.model.Resource;
-import de.brandwatch.minianalytics.mentiongenerator.postgres.repository.QueryRepository;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

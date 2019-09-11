@@ -45,8 +45,8 @@
             <artifactId>spring-data-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
+            <groupId>de.brandwatch.minianalytics</groupId>
+            <artifactId>library</artifactId>
         </dependency>
     </dependencies>
 

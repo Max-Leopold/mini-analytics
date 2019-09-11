@@ -18,6 +18,10 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-solr</artifactId>
         </dependency>
+        <dependency>
+            <groupId>de.brandwatch.minianalytics</groupId>
+            <artifactId>library</artifactId>
+        </dependency>
     </dependencies>
 
   <build>

@@ -1,7 +1,7 @@
 package de.brandwatch.minianalytics.mentionstorer.kafka;
 
-import de.brandwatch.minianalytics.mentionstorer.model.Mention;
-import de.brandwatch.minianalytics.mentionstorer.solr.repository.MentionRepository;
+import de.brandwatch.minianalytics.library.solr.model.Mention;
+import de.brandwatch.minianalytics.library.solr.repository.MentionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

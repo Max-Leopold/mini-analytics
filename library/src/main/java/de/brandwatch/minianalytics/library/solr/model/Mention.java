@@ -1,4 +1,4 @@
-package de.brandwatch.minianalytics.mentionstorer.model;
+package de.brandwatch.minianalytics.library.solr.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
@@ -67,4 +67,6 @@ public class Mention {
     public void setQueryID(long queryID) {
         this.queryID = queryID;
     }
+
+
 }

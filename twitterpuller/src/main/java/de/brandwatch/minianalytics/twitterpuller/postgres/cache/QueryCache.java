@@ -1,7 +1,7 @@
 package de.brandwatch.minianalytics.twitterpuller.postgres.cache;
 
-import de.brandwatch.minianalytics.twitterpuller.postgres.model.Query;
-import de.brandwatch.minianalytics.twitterpuller.postgres.repository.QueryRepository;
+import de.brandwatch.minianalytics.library.postgres.model.Query;
+import de.brandwatch.minianalytics.library.postgres.repository.QueryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;

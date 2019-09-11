@@ -1,9 +1,9 @@
 package de.brandwatch.minianalytics.mentiongenerator.kafka;
 
-import de.brandwatch.minianalytics.mentiongenerator.model.Mention;
-import de.brandwatch.minianalytics.mentiongenerator.model.Resource;
-import de.brandwatch.minianalytics.mentiongenerator.postgres.model.Query;
-import de.brandwatch.minianalytics.mentiongenerator.postgres.repository.QueryRepository;
+import de.brandwatch.minianalytics.library.model.Resource;
+import de.brandwatch.minianalytics.library.postgres.model.Query;
+import de.brandwatch.minianalytics.library.postgres.repository.QueryRepository;
+import de.brandwatch.minianalytics.library.solr.model.Mention;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;

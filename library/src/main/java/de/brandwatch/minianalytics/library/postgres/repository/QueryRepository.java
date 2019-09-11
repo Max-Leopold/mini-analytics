@@ -1,6 +1,6 @@
-package de.brandwatch.minianalytics.api.postgres.repository;
+package de.brandwatch.minianalytics.library.postgres.repository;
 
-import de.brandwatch.minianalytics.api.postgres.model.Query;
+import de.brandwatch.minianalytics.library.postgres.model.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

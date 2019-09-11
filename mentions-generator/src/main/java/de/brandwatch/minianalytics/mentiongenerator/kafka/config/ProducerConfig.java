@@ -1,8 +1,8 @@
 package de.brandwatch.minianalytics.mentiongenerator.kafka.config;
 
 
+import de.brandwatch.minianalytics.library.solr.model.Mention;
 import de.brandwatch.minianalytics.mentiongenerator.kafka.Producer;
-import de.brandwatch.minianalytics.mentiongenerator.model.Mention;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
