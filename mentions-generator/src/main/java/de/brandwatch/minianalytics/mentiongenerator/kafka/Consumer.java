@@ -2,13 +2,10 @@ package de.brandwatch.minianalytics.mentiongenerator.kafka;
 
 import de.brandwatch.minianalytics.mentiongenerator.model.Resource;
 import de.brandwatch.minianalytics.mentiongenerator.service.LuceneService;
-import org.apache.lucene.queryparser.classic.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
-
-import java.io.IOException;
 
 public class Consumer {
 
@@ -22,10 +19,10 @@ public class Consumer {
     }
 
     @KafkaListener(topics = "resources")
-    public void receive(Resource resource) throws ParseException, IOException {
+    public void receive(Resource resource) {
         logger.info("received message='{}'", resource.toString());
 
-        luceneService.indexResource(resource);
+        luceneService.writeToQ(resource);
     }
 }
 

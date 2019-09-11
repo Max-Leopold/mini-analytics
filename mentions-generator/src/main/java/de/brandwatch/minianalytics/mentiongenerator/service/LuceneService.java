@@ -3,8 +3,8 @@ package de.brandwatch.minianalytics.mentiongenerator.service;
 import de.brandwatch.minianalytics.mentiongenerator.kafka.Producer;
 import de.brandwatch.minianalytics.mentiongenerator.model.Mention;
 import de.brandwatch.minianalytics.mentiongenerator.model.Resource;
+import de.brandwatch.minianalytics.mentiongenerator.postgres.cache.QueryCache;
 import de.brandwatch.minianalytics.mentiongenerator.postgres.model.Query;
-import de.brandwatch.minianalytics.mentiongenerator.postgres.repository.QueryRepository;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -22,24 +22,28 @@ import org.apache.lucene.store.RAMDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
 public class LuceneService {
 
     private static final Logger logger = LoggerFactory.getLogger(LuceneService.class);
 
-    private final QueryRepository queryRepository;
-
     private final Producer producer;
 
+    private final QueryCache queryCache;
+
     @Autowired
-    public LuceneService(QueryRepository queryRepository, Producer producer) throws IOException {
-        this.queryRepository = queryRepository;
+    public LuceneService(Producer producer, QueryCache queryCache) throws IOException {
         this.producer = producer;
+        this.queryCache = queryCache;
     }
 
     private final Directory memoryIndex = new RAMDirectory();
@@ -53,24 +57,40 @@ public class LuceneService {
 
     private final QueryParser queryParser = new QueryParser("text", analyzer);
 
-    public void indexResource(Resource resource) throws IOException, ParseException {
-        Document document = new Document();
+    private final ConcurrentLinkedQueue<Resource> queue = new ConcurrentLinkedQueue<>();
 
-        document.add(new TextField("author", resource.getAuthor(), Field.Store.NO));
-        document.add(new TextField("text", resource.getText(), Field.Store.NO));
+    public void writeToQ(Resource resource) {
+        queue.add(resource);
+    }
 
-        logger.info("Indexed document:\n{\n\tauthor: " + document.get("author") + "\n\ttext: " + document.get("text") + "\n}");
+    @Scheduled(fixedDelay = 5 * 1000)
+    public void indexQ() throws IOException, ParseException {
+        while (!queue.isEmpty()) {
+            Resource resource = queue.poll();
 
-        writer.addDocument(document);
-        writer.commit();
+            Document document = new Document();
+
+            document.add(new TextField("author", resource.getAuthor(), Field.Store.YES));
+            document.add(new TextField("text", resource.getText(), Field.Store.YES));
+            document.add(new TextField("date", resource.getDate().toString(), Field.Store.YES));
+
+            writer.addDocument(document);
+            writer.commit();
+        }
+
+        searchIndex();
+    }
+
+    private void searchIndex() throws IOException, ParseException {
 
         reader = DirectoryReader.open(memoryIndex);
         searcher = new IndexSearcher(reader);
 
-        List<Query> queries = queryRepository.findAll();
+        List<Query> queries = queryCache.getCachedQueries();
         logger.info("received " + queries.size() + " queries");
 
-        for (Query query : queries) {
+        for (Query query: queries){
+
             org.apache.lucene.search.Query luceneQuery = queryParser.parse(query.toString());
 
             logger.info("Search Query: " + luceneQuery.toString());
@@ -79,18 +99,24 @@ public class LuceneService {
 
             logger.info("Total hits: " + topDocs.totalHits);
 
-            if (topDocs.totalHits == 1) {
-                logger.info("Query " + query.getQueryID() + " hit on resource " + resource.getText());
+            if(topDocs.totalHits >= 1){
+                Arrays.stream(topDocs.scoreDocs).forEach(x -> {
+                    try {
+                        Document document = searcher.doc(x.doc);
 
-                //Create Mention out of resource
-                Mention mention = new Mention();
-                mention.setQueryID(query.getQueryID());
-                mention.setAuthor(resource.getAuthor());
-                mention.setText(resource.getText());
-                mention.setDate(resource.getDate());
+                        Mention mention = new Mention();
+                        mention.setAuthor(document.get("author"));
+                        mention.setText(document.get("text"));
+                        mention.setQueryID(query.getQueryID());
+                        mention.setDate(Instant.parse(document.get("date")));
 
-                logger.info("Generated Mention: " + mention.toString());
-                producer.send(mention);
+                        logger.info("Generated Mention: " + mention);
+
+                        producer.send(mention);
+                    } catch (IOException e) {
+                        logger.warn(e.getMessage());
+                    }
+                });
             }
         }
         writer.deleteAll();

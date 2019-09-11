@@ -2,15 +2,20 @@ package de.brandwatch.minianalytics.mentionsgenerator.service;
 
 import de.brandwatch.minianalytics.mentiongenerator.kafka.Producer;
 import de.brandwatch.minianalytics.mentiongenerator.model.Resource;
+import de.brandwatch.minianalytics.mentiongenerator.postgres.cache.QueryCache;
 import de.brandwatch.minianalytics.mentiongenerator.postgres.model.Query;
-import de.brandwatch.minianalytics.mentiongenerator.postgres.repository.QueryRepository;
 import de.brandwatch.minianalytics.mentiongenerator.service.LuceneService;
 import org.apache.lucene.queryparser.classic.ParseException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -20,17 +25,28 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@ComponentScan("de.brandwatch.minianalytics.mentiongenerator.service")
 public class LuceneServiceTest {
 
+    @Configuration
+    @EnableScheduling
+    public class ScheduledConfig {
+    }
 
     @Mock
-    private QueryRepository queryRepository;
+    Producer producer;
 
     @Mock
-    private Producer producer;
+    QueryCache queryCache;
 
+    @SpyBean
     @InjectMocks
-    private LuceneService luceneService;
+    LuceneService luceneService;
+
+    @BeforeEach
+    public void init() {
+
+    }
 
     @Test
     void testLuceneIndexingAndSearch() throws IOException, ParseException {
@@ -39,23 +55,22 @@ public class LuceneServiceTest {
         List<Query> queries = new ArrayList<>();
         queries.add(query);
 
-        when(queryRepository.findAll()).thenReturn(queries);
+        when(queryCache.getCachedQueries()).thenReturn(queries);
 
-        Resource noMatch = new Resource();
-        noMatch.setText("Hallo Welt");
-        noMatch.setAuthor("Maximilian Leopold");
-        noMatch.setDate(Instant.now());
+        Resource matched = new Resource();
+        matched.setAuthor("Maximilian Leopold");
+        matched.setDate(Instant.now());
+        matched.setText("Hello World");
 
-        luceneService.indexResource(noMatch);
-        verify(producer, times(0)).send(any());
+        Resource notMatched = new Resource();
+        notMatched.setAuthor("Max Leopold");
+        notMatched.setDate(Instant.now());
+        notMatched.setText("Hello World");
 
-        Resource match = new Resource();
-        match.setText("Hello World");
-        match.setAuthor("Maximilian Leopold");
-        match.setDate(Instant.now());
+        luceneService.writeToQ(matched);
+        luceneService.writeToQ(notMatched);
+        luceneService.indexQ();
 
-        luceneService.indexResource(match);
         verify(producer, times(1)).send(any());
-
     }
 }
