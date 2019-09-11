@@ -1,5 +1,4 @@
-# Mini Analytics [![Build Status](https://travis-ci.com/Max-Leopold/mini-analytics.svg?branch=master)](https://travis-ci.com/Max-Leopold/mini-analytics)
-
+# Mini Analytics [![Actions Status](https://github.com/Max-Leopold/mini-analytics/workflows/Java%20CI/badge.svg)](https://github.com/Max-Leopold/mini-analytics/actions)
 Mini Analytics is a small scale project I've done as an internship introduction project.
 
 This project can be used to search Twitter for user written Lucene queries.
