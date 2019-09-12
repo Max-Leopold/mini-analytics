@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="accountCreatedDiv"></div>
+    <div><label> User Name : <input type="text" name="username" id="userNameInput"/> </label></div>
+    <br>
+    <div><label> Password: <input type="password" name="password" id="passwordInput"/> </label></div>
+    <div><input type="submit" value="Sign up" onclick="registerUser()"/></div>
+    <br>
+    <div>
+        <form action="http://localhost:8080/login">
+            <input type="submit" value="Login"/>
+        </form>
+    </div>
+</body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    function registerUser() {
+        var username = document.getElementById("userNameInput").value;
+        var password = document.getElementById("passwordInput").value;
+
+        axios.post('http://localhost:8080/registration', null, {
+            params: {
+                username: username,
+                password: password
+            }
+        }).then(function (response) {
+            console.log(response);
+            if(response.status === 200){
+                document.getElementById("accountCreatedDiv").innerHTML = "Successfully created account"
+            }else {
+                document.getElementById("accountCreatedDiv").innerHTML = "Sorry, there was an error creating your account"
+            }
+        })
+    }
+</script>
+</html>
