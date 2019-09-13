@@ -33,6 +33,7 @@ public class QueryController {
             logger.info("POST /queries: {}", query);
             return queryService.createQuery(query);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Couldn't create Query.", e);
         }
     }
@@ -43,6 +44,7 @@ public class QueryController {
             logger.info("GET /queries");
             return queryService.getAllQueries();
         } catch (Exception e) {
+            logger.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Couldn't fetch Queries. Maybe there is a database problem.", e);
         }
@@ -55,6 +57,7 @@ public class QueryController {
             return queryService.getQueryByID(queryID)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT, "No Query with ID " + queryID + " was found."));
         } catch (Exception e) {
+            logger.error(e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "", e);
         }
     }

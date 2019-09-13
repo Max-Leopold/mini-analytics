@@ -59,6 +59,7 @@ public class Query {
         return "{" +
                 "\n\tqueryID: " + queryID +
                 "\n\tquery: " + query +
+                "\n\tuser: " + user +
                 "\n}";
     }
 }

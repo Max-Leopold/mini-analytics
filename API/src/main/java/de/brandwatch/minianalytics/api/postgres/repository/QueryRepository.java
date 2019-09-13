@@ -9,4 +9,5 @@ import java.util.List;
 public interface QueryRepository extends JpaRepository<Query, Long> {
 
     List<Query> findByUserId(Long userId);
+    Query findByQueryID(Long queryId);
 }
