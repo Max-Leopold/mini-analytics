@@ -32,6 +32,6 @@ public class UserService {
     }
 
     public void checkForUsernameDuplicate(String username) throws Exception {
-        if(userRepository.findByUsername(username) == null) throw new Exception("Duplicate username");
+        if(!(userRepository.findByUsername(username) == null)) throw new Exception("Duplicate username");
     }
 }
