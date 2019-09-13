@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
 
 import java.time.Instant;
+import java.util.Objects;
 
 public class Mention {
 
@@ -61,5 +62,21 @@ public class Mention {
                 "\ttext: " + getText() + "\n" +
                 "\tdate: " + getDate().toString() + "\n" +
                 "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Mention)) return false;
+        Mention mention = (Mention) o;
+        return getQueryID() == mention.getQueryID() &&
+                getAuthor().equals(mention.getAuthor()) &&
+                getText().equals(mention.getText()) &&
+                getDate().equals(mention.getDate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getQueryID(), getAuthor(), getText(), getDate());
     }
 }
