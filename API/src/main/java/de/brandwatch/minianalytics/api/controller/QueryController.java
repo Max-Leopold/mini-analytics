@@ -2,6 +2,7 @@ package de.brandwatch.minianalytics.api.controller;
 
 import com.google.gson.Gson;
 import de.brandwatch.minianalytics.api.postgres.model.Query;
+import com.google.gson.GsonBuilder;
 import de.brandwatch.minianalytics.api.service.QueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,13 +13,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-
 @RestController
 public class QueryController {
 
     private static final Logger logger = LoggerFactory.getLogger(QueryController.class);
 
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     private QueryService queryService;
 

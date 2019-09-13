@@ -1,5 +1,6 @@
 package de.brandwatch.minianalytics.api.postgres.model;
 
+import com.google.gson.annotations.Expose;
 import de.brandwatch.minianalytics.api.security.model.User;
 
 import javax.persistence.*;
@@ -11,9 +12,11 @@ public class Query {
     @Id
     @GeneratedValue
     @Column(name = "queryID")
+    @Expose
     private long queryID;
 
     @Column(name = "query")
+    @Expose
     private String query;
 
     @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)

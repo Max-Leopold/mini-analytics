@@ -50,7 +50,7 @@ public class QueryService {
         return queryRepository.findByUserId(userId);
     }
 
-    public Optional<Query> getQueryByID(String queryID) {
+    public Optional<Query> getQueryByID(String queryID) throws Exception {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = ((UserDetails) principal).getUsername();
@@ -62,6 +62,6 @@ public class QueryService {
 
         if(query.isPresent() && query.get().getUser().getId().equals(userId)) return queryRepository.findById(Long.valueOf(queryID));
 
-        return Optional.empty();
+        throw new Exception("Query " + queryID + " doesnt belong to user " + username);
     }
 }
