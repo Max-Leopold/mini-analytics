@@ -42,10 +42,10 @@ public class QueryCacheTest {
     }
 
     @Autowired
-    QueryRepository queryRepository;
+    private QueryRepository queryRepository;
 
     @Autowired
-    QueryCache queryCache;
+    private QueryCache queryCache;
 
     @Test
     public void testIfFindAllIsCalledOnceAndThenCached() {
