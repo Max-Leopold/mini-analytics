@@ -13,6 +13,7 @@
         <module>mentions-generator</module>
         <module>API</module>
         <module>twitterpuller</module>
+        <module>reddit-scraper</module>
     </modules>
 
     <properties>
@@ -80,10 +81,16 @@
                 <artifactId>spring-kafka-test</artifactId>
                 <version>2.2.8.RELEASE</version>
             </dependency>
+
             <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>2.8.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>1.11.3</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
