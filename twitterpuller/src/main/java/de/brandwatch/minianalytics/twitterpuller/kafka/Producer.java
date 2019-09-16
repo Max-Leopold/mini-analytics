@@ -16,6 +16,6 @@ public class Producer {
     public void send(Resource resource){
 
         logger.info("sending message='{}'", resource.toString());
-        kafkaTemplate.send("resources", String.valueOf(System.currentTimeMillis()), resource);
+        kafkaTemplate.send("twitter", String.valueOf(System.currentTimeMillis()), resource);
     }
 }
