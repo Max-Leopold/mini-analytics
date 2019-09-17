@@ -21,6 +21,8 @@ public class Producer {
 
     public void send(Mention mention){
         logger.info("sending message='{}", mention);
-        kafkaTemplate.send("mentions",String.valueOf(Instant.now()), mention);
+        kafkaTemplate.send("mentions",
+                String.valueOf(Instant.now()),
+                mention);
     }
 }
