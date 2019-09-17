@@ -117,27 +117,21 @@ services:
 
 
   mention-storer:
-    build:
-      context: ../mention-storer/
-      dockerfile: dockerfile
+    build: ../mention-storer/
     hostname: mention-storer
     restart: always
     environment:
       WAIT_HOSTS: solr:8983
 
   mentions-generator:
-    build:
-      context: ../mentions-generator/
-      dockerfile: dockerfile
+    build: ../mentions-generator/
     hostname: mentions-generator
     restart: always
     environment:
       WAIT_HOSTS: postgres:5432
 
   twitter-puller:
-    build:
-      context: ../twitterpuller/
-      dockerfile: dockerfile
+    build: ../twitterpuller/
     hostname: twitterpuller
     restart: always
     environment:
