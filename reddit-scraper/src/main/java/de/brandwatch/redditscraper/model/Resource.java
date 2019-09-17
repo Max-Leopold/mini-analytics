@@ -17,7 +17,6 @@ public class Resource {
     @JsonDeserialize(using = InstantDeserializer.class)
     private Instant date;
 
-
     public String getAuthor() {
         return author;
     }
@@ -55,5 +54,14 @@ public class Resource {
     @Override
     public int hashCode() {
         return Objects.hash(getAuthor(), getText(), getDate());
+    }
+
+    @Override
+    public String toString() {
+        return "Resource{" +
+                "author='" + author + '\'' +
+                ", text='" + text + '\'' +
+                ", date=" + date +
+                '}';
     }
 }

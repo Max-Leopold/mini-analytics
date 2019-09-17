@@ -1,7 +1,8 @@
 package de.brandwatch.redditscraper;
 
 import de.brandwatch.redditscraper.kafka.Producer;
-import de.brandwatch.redditscraper.reddit.RedditScraper;
+import de.brandwatch.redditscraper.reddit.RedditScraperForComments;
+import de.brandwatch.redditscraper.reddit.RedditScraperForTitles;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -14,8 +15,12 @@ public class RedditScraperApplication {
     }
 
     @Bean(initMethod = "scrapeReddit")
-    public RedditScraper redditScraper(Producer producer) {
-        return new RedditScraper(producer);
+    public RedditScraperForTitles redditScraperForTitles(Producer producer, RedditScraperForComments redditScraperForComments) {
+        return new RedditScraperForTitles(producer, redditScraperForComments);
     }
 
+    @Bean
+    public RedditScraperForComments redditScraperForComments(Producer producer){
+        return new RedditScraperForComments(producer);
+    }
 }

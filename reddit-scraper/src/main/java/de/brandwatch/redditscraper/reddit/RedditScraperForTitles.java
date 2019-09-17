@@ -5,32 +5,40 @@ import de.brandwatch.redditscraper.model.Resource;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
 
-public class RedditScraper {
+public class RedditScraperForTitles {
+
+    private static final Logger logger = LoggerFactory.getLogger(RedditScraperForTitles.class);
 
     private static final String REDDIT_URL = "https://old.reddit.com";
 
     private final Producer producer;
 
+    private final RedditScraperForComments redditScraperForComments;
+
     @Autowired
-    public RedditScraper(Producer producer) {
+    public RedditScraperForTitles(Producer producer, RedditScraperForComments redditScraperForComments) {
         this.producer = producer;
+        this.redditScraperForComments = redditScraperForComments;
     }
 
     public void scrapeReddit() throws IOException {
-        scrapeReddit(REDDIT_URL);
+        scrapeRedditForTitles(REDDIT_URL);
     }
 
-    public void scrapeReddit(String URL) throws IOException {
+    public void scrapeRedditForTitles(String URL) throws IOException {
         Document reddit = Jsoup.connect(URL).get();
         Elements posts = reddit.getElementsByClass("top-matter"); //Whitespace at the end is important!
 
         posts.forEach(x -> {
             Resource resource = new Resource();
+
             resource.setText(x.select(".title > .title.may-blank").text());
             resource.setAuthor(x.select(".tagline > .author").text());
 
@@ -40,17 +48,24 @@ public class RedditScraper {
             ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateTime);
             resource.setDate(zonedDateTime.toInstant());
 
+            try {
+                String commentURL = x.select(".title > .title.may-blank").attr("abs:href");
+                logger.info("Scraping comments of: " + commentURL);
+                redditScraperForComments.scrapeRedditForComments(commentURL);
+            } catch (IOException e) {
+               logger.warn(e.getMessage(), e);
+            }
+
             producer.send(resource);
         });
 
         Elements nextPage = reddit.select(".next-button > a");
 
         nextPage.forEach(x -> {
-            System.out.println(x.attr("href"));
             try {
-                scrapeReddit(x.attr("href"));
+                scrapeRedditForTitles(x.attr("href"));
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.warn(e.getMessage(), e);
             }
         });
     }
