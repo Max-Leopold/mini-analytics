@@ -1,7 +1,6 @@
 package de.brandwatch.minianalytics.mentionstorer.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
@@ -25,7 +24,7 @@ public class Mention {
     private String text;
 
     @Indexed(name = "date", type = "date")
-    @JsonDeserialize(using = InstantDeserializer.class)
+    @JsonFormat
     private Instant date;
 
     public String getAuthor() {
