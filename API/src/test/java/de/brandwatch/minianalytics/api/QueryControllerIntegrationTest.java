@@ -1,7 +1,6 @@
 package de.brandwatch.minianalytics.api;
 
 import de.brandwatch.minianalytics.api.postgres.model.Query;
-import de.brandwatch.minianalytics.api.postgres.repository.QueryRepository;
 import de.brandwatch.minianalytics.api.security.model.User;
 import de.brandwatch.minianalytics.api.util.PostgresClient;
 import org.junit.jupiter.api.AfterEach;
@@ -16,11 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,12 +24,14 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.HashSet;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,6 +43,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class QueryControllerIntegrationTest {
 
     private static final Logger logger = LoggerFactory.getLogger(QueryControllerIntegrationTest.class);
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     static class Initializer
             implements ApplicationContextInitializer<ConfigurableApplicationContext> {
@@ -70,14 +69,7 @@ public class QueryControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    QueryRepository queryRepository;
+    private HttpSession httpSession;
 
     private User user;
 
@@ -92,18 +84,20 @@ public class QueryControllerIntegrationTest {
     }
 
     @BeforeEach
-    public void beforeEach() throws SQLException {
+    public void beforeEach() throws Exception {
         user = new User("username",
                 bCryptPasswordEncoder.encode("password"),
                 new HashSet<>());
         user.setId(1L);
         postgresClient.inserUser(user);
 
-        UsernamePasswordAuthenticationToken authReq
-                = new UsernamePasswordAuthenticationToken("username", "password");
-        Authentication auth = authenticationManager.authenticate(authReq);
-        SecurityContext sc = SecurityContextHolder.getContext();
-        sc.setAuthentication(auth);
+        httpSession = mockMvc.perform(formLogin("/login")
+                .user("username")
+                .password("password"))
+                .andDo(print())
+                .andReturn()
+                .getRequest()
+                .getSession();
     }
 
     @AfterEach
@@ -117,6 +111,7 @@ public class QueryControllerIntegrationTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/queries")
+                .session((MockHttpSession) httpSession)
                 .param("query", "Hello World AND author: \"Max Leopold\""))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -130,7 +125,8 @@ public class QueryControllerIntegrationTest {
         postgresClient.insertQuery(expectedQuery);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/queries"))
+                .get("/queries")
+                .session((MockHttpSession) httpSession))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(jsonPath("$[0].query", is(equalTo(expectedQuery.getQuery()))));
@@ -143,7 +139,8 @@ public class QueryControllerIntegrationTest {
         postgresClient.insertQuery(expectedQuery);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/queries/1"))
+                .get("/queries/1")
+                .session((MockHttpSession) httpSession))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(jsonPath("$.query", is(equalTo(expectedQuery.getQuery()))));

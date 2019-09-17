@@ -17,11 +17,7 @@ import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,12 +31,14 @@ import org.testcontainers.images.builder.ImageFromDockerfile;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @Testcontainers
@@ -69,6 +67,8 @@ public class MentionControllerIntegrationTest {
         }
     }
 
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
     //Solr Cloud Mode
     private static ImageFromDockerfile solrCloudMode = new ImageFromDockerfile()
             .withDockerfileFromBuilder(dockerfileBuilder ->
@@ -83,20 +83,16 @@ public class MentionControllerIntegrationTest {
     @Container
     private static PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer();
 
+    private static PostgresClient postgresClient;
+
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
     private User user;
 
-    private static PostgresClient postgresClient;
-
     private SolrClient solrClient;
+
+    private HttpSession httpSession;
 
     @BeforeAll
     public static void init() throws SQLException {
@@ -107,7 +103,7 @@ public class MentionControllerIntegrationTest {
     }
 
     @BeforeEach
-    public void beforeEach() throws SQLException {
+    public void beforeEach() throws Exception {
 
         String createCollectionURL = "http://localhost:" +
                 solrCloudModeContainer.getMappedPort(8983) +
@@ -125,11 +121,13 @@ public class MentionControllerIntegrationTest {
 
         postgresClient.inserUser(user);
 
-        UsernamePasswordAuthenticationToken authReq
-                = new UsernamePasswordAuthenticationToken("username", "password");
-        Authentication auth = authenticationManager.authenticate(authReq);
-        SecurityContext sc = SecurityContextHolder.getContext();
-        sc.setAuthentication(auth);
+        httpSession = mockMvc.perform(formLogin("/login")
+                .user("username")
+                .password("password"))
+                .andDo(print())
+                .andReturn()
+                .getRequest()
+                .getSession();
     }
 
     @AfterEach
@@ -162,7 +160,7 @@ public class MentionControllerIntegrationTest {
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/mentions/0"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/mentions/0").session((MockHttpSession) httpSession))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].queryID", Is.is(equalTo((int) mention.getQueryID()))))
