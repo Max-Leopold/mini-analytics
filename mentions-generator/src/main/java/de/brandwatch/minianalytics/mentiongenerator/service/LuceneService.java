@@ -100,32 +100,29 @@ public class LuceneService {
 
             logger.info("Total hits: " + topDocs.totalHits);
 
-            if (topDocs.totalHits >= 1) {
-                Arrays.stream(topDocs.scoreDocs).map(doc -> {
-                    try {
-                        return toMention(doc, query);
-                    } catch (IOException e) {
-                        logger.warn(e.getMessage(), e);
-                    }
-                    return null;
-                }).forEach(producer::send);
-            }
+            Arrays.stream(topDocs.scoreDocs).map(doc -> toMention(doc, query))
+                    .forEach(producer::send);
         }
         writer.deleteAll();
         writer.commit();
     }
 
-    public Mention toMention(ScoreDoc scoreDoc, Query query) throws IOException {
-        Document document = searcher.doc(scoreDoc.doc);
-        Mention mention = new Mention();
+    public Mention toMention(ScoreDoc scoreDoc, Query query) {
+        try {
+            Document document = searcher.doc(scoreDoc.doc);
+            Mention mention = new Mention();
 
-        mention.setAuthor(document.get("author"));
-        mention.setText(document.get("text"));
-        mention.setQueryID(query.getQueryID());
-        mention.setDate(Instant.parse(document.get("date")));
+            mention.setAuthor(document.get("author"));
+            mention.setText(document.get("text"));
+            mention.setQueryID(query.getQueryID());
+            mention.setDate(Instant.parse(document.get("date")));
 
-        logger.info("Generated Mention: " + mention);
+            logger.info("Generated Mention: " + mention);
 
-        return mention;
+            return mention;
+        } catch (IOException e) {
+            logger.error("An exception occurred during mention creation", e);
+            return null;
+        }
     }
 }
