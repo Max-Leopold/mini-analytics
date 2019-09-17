@@ -16,6 +16,7 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
@@ -40,24 +41,24 @@ public class LuceneService {
 
     private final QueryCache queryCache;
 
-    @Autowired
-    public LuceneService(Producer producer, QueryCache queryCache) throws IOException {
-        this.producer = producer;
-        this.queryCache = queryCache;
-    }
-
     private final Directory memoryIndex = new RAMDirectory();
     private final StandardAnalyzer analyzer = new StandardAnalyzer();
 
     private final IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
     private final IndexWriter writer = new IndexWriter(memoryIndex, indexWriterConfig);
 
-    private IndexSearcher searcher;
-    private IndexReader reader;
-
     private final QueryParser queryParser = new QueryParser("text", analyzer);
 
     private final ConcurrentLinkedQueue<Resource> queue = new ConcurrentLinkedQueue<>();
+
+    private IndexSearcher searcher;
+    private IndexReader reader;
+
+    @Autowired
+    public LuceneService(Producer producer, QueryCache queryCache) throws IOException {
+        this.producer = producer;
+        this.queryCache = queryCache;
+    }
 
     public void writeToQ(Resource resource) {
         queue.add(resource);
@@ -89,7 +90,7 @@ public class LuceneService {
         List<Query> queries = queryCache.getCachedQueries();
         logger.info("received " + queries.size() + " queries");
 
-        for (Query query: queries){
+        for (Query query : queries) {
 
             org.apache.lucene.search.Query luceneQuery = queryParser.parse(query.toString());
 
@@ -99,27 +100,32 @@ public class LuceneService {
 
             logger.info("Total hits: " + topDocs.totalHits);
 
-            if(topDocs.totalHits >= 1){
-                Arrays.stream(topDocs.scoreDocs).forEach(x -> {
+            if (topDocs.totalHits >= 1) {
+                Arrays.stream(topDocs.scoreDocs).map(doc -> {
                     try {
-                        Document document = searcher.doc(x.doc);
-
-                        Mention mention = new Mention();
-                        mention.setAuthor(document.get("author"));
-                        mention.setText(document.get("text"));
-                        mention.setQueryID(query.getQueryID());
-                        mention.setDate(Instant.parse(document.get("date")));
-
-                        logger.info("Generated Mention: " + mention);
-
-                        producer.send(mention);
+                        return toMention(doc, query);
                     } catch (IOException e) {
-                        logger.warn(e.getMessage());
+                        logger.warn(e.getMessage(), e);
                     }
-                });
+                    return null;
+                }).forEach(producer::send);
             }
         }
         writer.deleteAll();
         writer.commit();
+    }
+
+    public Mention toMention(ScoreDoc scoreDoc, Query query) throws IOException {
+        Document document = searcher.doc(scoreDoc.doc);
+        Mention mention = new Mention();
+
+        mention.setAuthor(document.get("author"));
+        mention.setText(document.get("text"));
+        mention.setQueryID(query.getQueryID());
+        mention.setDate(Instant.parse(document.get("date")));
+
+        logger.info("Generated Mention: " + mention);
+
+        return mention;
     }
 }
