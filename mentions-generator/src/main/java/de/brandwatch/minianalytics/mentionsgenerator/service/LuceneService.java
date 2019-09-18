@@ -41,8 +41,8 @@ public class LuceneService {
 
     private final QueryCache queryCache;
 
-    private final Directory memoryIndex = new RAMDirectory();
-    private final StandardAnalyzer analyzer = new StandardAnalyzer();
+    private Directory memoryIndex = new RAMDirectory();
+    private StandardAnalyzer analyzer = new StandardAnalyzer();
 
     private final IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
     private final IndexWriter writer = new IndexWriter(memoryIndex, indexWriterConfig);
@@ -61,11 +61,14 @@ public class LuceneService {
     }
 
     public void writeToQ(Resource resource) {
+        logger.info("Added resource to queue");
         queue.add(resource);
+        logger.info("Queue size: " + queue.size());
     }
 
     @Scheduled(fixedDelay = 5 * 1000)
     public void indexQ() throws IOException, ParseException {
+        logger.info("Index Queue for size " + queue.size());
         while (!queue.isEmpty()) {
             Resource resource = queue.poll();
 
@@ -84,6 +87,7 @@ public class LuceneService {
 
     private void searchIndex() throws IOException, ParseException {
 
+        logger.info("Search index");
         reader = DirectoryReader.open(memoryIndex);
         searcher = new IndexSearcher(reader);
 
