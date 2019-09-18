@@ -1,12 +1,12 @@
-package de.brandwatch.minianalytics.mentiongenerator.kafka;
+package de.brandwatch.minianalytics.mentionsgenerator.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import de.brandwatch.minianalytics.mentiongenerator.model.Mention;
-import de.brandwatch.minianalytics.mentiongenerator.model.Resource;
-import de.brandwatch.minianalytics.mentiongenerator.postgres.model.Query;
-import de.brandwatch.minianalytics.mentiongenerator.postgres.repository.QueryRepository;
+import de.brandwatch.minianalytics.mentionsgenerator.model.Mention;
+import de.brandwatch.minianalytics.mentionsgenerator.model.Resource;
+import de.brandwatch.minianalytics.mentionsgenerator.postgres.model.Query;
+import de.brandwatch.minianalytics.mentionsgenerator.postgres.repository.QueryRepository;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;

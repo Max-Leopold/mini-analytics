@@ -1,4 +1,4 @@
-package de.brandwatch.minianalytics.mentiongenerator.postgres.model;
+package de.brandwatch.minianalytics.mentionsgenerator.postgres.model;
 
 import javax.persistence.*;
 

@@ -1,11 +1,11 @@
-package de.brandwatch.minianalytics.mentiongenerator.kafka.config;
+package de.brandwatch.minianalytics.mentionsgenerator.kafka.config;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import de.brandwatch.minianalytics.mentiongenerator.kafka.Producer;
-import de.brandwatch.minianalytics.mentiongenerator.model.Mention;
+import de.brandwatch.minianalytics.mentionsgenerator.kafka.Producer;
+import de.brandwatch.minianalytics.mentionsgenerator.model.Mention;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

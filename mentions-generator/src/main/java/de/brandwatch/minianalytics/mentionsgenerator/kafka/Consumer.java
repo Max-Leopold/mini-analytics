@@ -1,7 +1,7 @@
-package de.brandwatch.minianalytics.mentiongenerator.kafka;
+package de.brandwatch.minianalytics.mentionsgenerator.kafka;
 
-import de.brandwatch.minianalytics.mentiongenerator.model.Resource;
-import de.brandwatch.minianalytics.mentiongenerator.service.LuceneService;
+import de.brandwatch.minianalytics.mentionsgenerator.model.Resource;
+import de.brandwatch.minianalytics.mentionsgenerator.service.LuceneService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,11 +1,10 @@
 package de.brandwatch.minianalytics.mentionsgenerator.service;
 
-import de.brandwatch.minianalytics.mentiongenerator.kafka.Producer;
-import de.brandwatch.minianalytics.mentiongenerator.model.Mention;
-import de.brandwatch.minianalytics.mentiongenerator.model.Resource;
-import de.brandwatch.minianalytics.mentiongenerator.postgres.cache.QueryCache;
-import de.brandwatch.minianalytics.mentiongenerator.postgres.model.Query;
-import de.brandwatch.minianalytics.mentiongenerator.service.LuceneService;
+import de.brandwatch.minianalytics.mentionsgenerator.kafka.Producer;
+import de.brandwatch.minianalytics.mentionsgenerator.model.Mention;
+import de.brandwatch.minianalytics.mentionsgenerator.model.Resource;
+import de.brandwatch.minianalytics.mentionsgenerator.postgres.cache.QueryCache;
+import de.brandwatch.minianalytics.mentionsgenerator.postgres.model.Query;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

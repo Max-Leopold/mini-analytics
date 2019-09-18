@@ -1,7 +1,6 @@
 package de.brandwatch.minianalytics.mentionsgenerator.postgres.cache;
 
-import de.brandwatch.minianalytics.mentiongenerator.postgres.cache.QueryCache;
-import de.brandwatch.minianalytics.mentiongenerator.postgres.repository.QueryRepository;
+import de.brandwatch.minianalytics.mentionsgenerator.postgres.repository.QueryRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package de.brandwatch.minianalytics.mentiongenerator.model;
+package de.brandwatch.minianalytics.mentionsgenerator.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
