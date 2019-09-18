@@ -16,6 +16,7 @@ public class Producer {
 
     @Autowired
     public Producer(KafkaTemplate<String, Mention> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public void send(Mention mention){

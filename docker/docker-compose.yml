@@ -123,7 +123,7 @@ services:
     hostname: mention-storer
     restart: always
     environment:
-      WAIT_HOSTS: solr:8983
+      WAIT_HOSTS: solr1:8983
 
   mentions-generator:
     build: ../mentions-generator/
@@ -148,9 +148,6 @@ services:
       - "8080:8080"
     environment:
       WAIT_HOSTS: postgres:5432
-
-
-
 
 volumes:
   kafka1:

@@ -52,4 +52,13 @@ public class Resource {
     public int hashCode() {
         return Objects.hash(getAuthor(), getText(), getDate());
     }
+
+    @Override
+    public String toString() {
+        return "Resource{" +
+                "author='" + author + '\'' +
+                ", text='" + text + '\'' +
+                ", date=" + date +
+                '}';
+    }
 }
