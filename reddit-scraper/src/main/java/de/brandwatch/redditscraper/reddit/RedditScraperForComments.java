@@ -4,7 +4,7 @@ import de.brandwatch.redditscraper.kafka.Producer;
 import de.brandwatch.redditscraper.model.Resource;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
@@ -19,25 +19,27 @@ public class RedditScraperForComments {
         this.producer = producer;
     }
 
-    public void scrapeRedditForComments(String URL) throws IOException {
+    public void scrapeRedditForComments(String url) throws IOException {
 
-        Document reddit = Jsoup.connect(URL).get();
+        Document reddit = Jsoup.connect(url).get();
 
-        Elements elements = reddit.getElementsByClass("entry unvoted");
+        reddit.getElementsByClass("entry unvoted").stream()
+                .map(this::mapToResource)
+                .filter(resource -> !resource.getText().equals(""))
+                .forEach(producer::send);
+    }
 
-        elements.forEach(x -> {
-            Resource resource = new Resource();
-            resource.setAuthor(x.select(".author").text());
+    private Resource mapToResource(Element element) {
+        Resource resource = new Resource();
+        resource.setAuthor(element.select(".author").text());
 
-            String text = x.getElementsByClass("usertext-body may-blank-within md-container ").text();
-            if(text.equals("")) return;
-            resource.setText(text);
+        String text = element.getElementsByClass("usertext-body may-blank-within md-container ").text();
+        resource.setText(text);
 
-            String dateTime = x.getElementsByClass("live-timestamp").attr("datetime");
-            ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateTime);
-            resource.setDate(zonedDateTime.toInstant());
+        String dateTime = element.getElementsByClass("live-timestamp").attr("datetime");
+        ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateTime);
+        resource.setDate(zonedDateTime.toInstant());
 
-            producer.send(resource);
-        });
+        return resource;
     }
 }

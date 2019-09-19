@@ -39,36 +39,14 @@ public class RedditScraperForTitles {
         scrapeRedditForTitles(REDDIT_URL, 1);
     }
 
-    public void scrapeRedditForTitles(String URL, int pageCounter) throws IOException {
-        Document reddit = Jsoup.connect(URL).get();
+    public void scrapeRedditForTitles(String url, int pageCounter) throws IOException {
+        Document reddit = Jsoup.connect(url).get();
         Elements posts = reddit.getElementsByClass("top-matter"); //Whitespace at the end is important!
 
-        posts.forEach(x -> {
-
-            String commentURL = x.select(".title > .title.may-blank").attr("abs:href");
-            if(visitedSites.contains(commentURL)) return;
-            else visitedSites.add(commentURL);
-
-            Resource resource = new Resource();
-
-            resource.setText(x.select(".title > .title.may-blank").text());
-            resource.setAuthor(x.select(".tagline > .author").text());
-
-            String dateTime = x.select(".tagline > .live-timestamp").attr("datetime");
-            if(dateTime.equals("")) return;
-
-            ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateTime);
-            resource.setDate(zonedDateTime.toInstant());
-
-            try {
-                logger.info("Scraping comments of: " + commentURL);
-                redditScraperForComments.scrapeRedditForComments(commentURL);
-            } catch (IOException e) {
-               logger.warn(e.getMessage(), e);
-            }
-
-            producer.send(resource);
-        });
+        reddit.getElementsByClass("top-matter").stream()
+                .map(this::mapToResource)
+                .filter(resource -> !(resource.getDate() == null))
+                .forEach(producer::send);
 
         Elements nextPage = reddit.select(".next-button > a");
 
@@ -77,5 +55,35 @@ public class RedditScraperForTitles {
             //Scrape top 50 sites
             if(pageCounter < 51) scrapeRedditForTitles(element.attr("href"), pageCounter);
         }
+    }
+
+    private void scrapeComments(Element element) {
+        String commentURL = element.select(".title > .title.may-blank").attr("abs:href");
+
+        try {
+            logger.info("Scraping comments of: " + commentURL);
+            redditScraperForComments.scrapeRedditForComments(commentURL);
+        } catch (IOException e) {
+            logger.warn("Error trying to scrape comments", e);
+        }
+    }
+
+    private Resource mapToResource(Element element) {
+        Resource resource = new Resource();
+
+        resource.setText(element.select(".title > .title.may-blank").text());
+        resource.setAuthor(element.select(".tagline > .author").text());
+
+        String dateTime = element.select(".tagline > .live-timestamp").attr("datetime");
+        if(!dateTime.equals("")) {
+            ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateTime);
+            resource.setDate(zonedDateTime.toInstant());
+        } else {
+            resource.setDate(null);
+        }
+
+        scrapeComments(element);
+
+        return resource;
     }
 }

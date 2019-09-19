@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 
+import java.time.Instant;
+
 public class Producer {
 
     private static final Logger logger = LoggerFactory.getLogger(Producer.class);
@@ -16,6 +18,6 @@ public class Producer {
     public void send(Resource resource){
 
         logger.info("sending message='{}'", resource.toString());
-        kafkaTemplate.send("reddit", String.valueOf(System.currentTimeMillis()), resource);
+        kafkaTemplate.send("reddit", String.valueOf(Instant.now()), resource);
     }
 }
