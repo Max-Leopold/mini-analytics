@@ -43,17 +43,23 @@ public class LuceneServiceTest {
         matched.setAuthor("Maximilian Leopold");
         matched.setDate(Instant.now());
         matched.setText("Hello World");
+        matched.setSourceTag("twitter");
+        matched.setURL("abc.com");
 
         Resource notMatched = new Resource();
         notMatched.setAuthor("Max Leopold");
         notMatched.setDate(Instant.now());
         notMatched.setText("Hello World");
+        notMatched.setURL("abcd.com");
+        notMatched.setSourceTag("twitter");
 
         Mention mention = new Mention();
         mention.setDate(matched.getDate());
         mention.setText(matched.getText());
         mention.setAuthor(matched.getAuthor());
         mention.setQueryID(0);
+        mention.setSourceTag("twitter");
+        mention.setURL("abc.com");
 
         luceneService.writeToQ(matched);
         luceneService.writeToQ(notMatched);

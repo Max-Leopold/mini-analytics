@@ -13,13 +13,13 @@ public class SolrConfig {
     @Value("${spring.data.solr.host}")
     private String solrURL;
 
-    @Bean
+    @Bean("customSolrClient")
     public SolrClient solrClient() {
         return new HttpSolrClient.Builder(solrURL).build();
     }
 
     @Bean
-    public SolrTemplate solrTemplate(SolrClient client) {
-        return new SolrTemplate(client);
+    public SolrTemplate solrTemplate(SolrClient customSolrClient) {
+        return new SolrTemplate(customSolrClient);
     }
 }

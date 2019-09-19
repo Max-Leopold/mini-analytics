@@ -87,8 +87,8 @@ services:
     hostname: solr1
     ports:
       - "8983:8983"
-#    environment:
-#      ZK_HOST: zoo1:2181
+    environment:
+      ZK_HOST: zoo1:2181
     entrypoint:
       - bash
       - "-c"
@@ -142,12 +142,18 @@ services:
   api:
     build: ../API/
     hostname: api
-    working_dir: /API
     restart: always
     ports:
       - "8080:8080"
     environment:
       WAIT_HOSTS: postgres:5432
+
+  resource-filter:
+    build: ../resource-filter/
+    hostname: resource-filter
+    restart: always
+    environment:
+      WAIT_HOSTS: kafka1:9092
 
 volumes:
   kafka1:

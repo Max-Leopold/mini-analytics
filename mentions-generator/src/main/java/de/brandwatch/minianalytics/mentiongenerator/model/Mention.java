@@ -11,6 +11,8 @@ public class Mention {
 
     private String author;
     private String text;
+    private String sourceTag;
+    private String URL;
 
     @JsonFormat
     private Instant date;
@@ -50,14 +52,32 @@ public class Mention {
         this.queryID = queryID;
     }
 
+    public String getSourceTag() {
+        return sourceTag;
+    }
+
+    public void setSourceTag(String sourceTag) {
+        this.sourceTag = sourceTag;
+    }
+
+    public String getURL() {
+        return URL;
+    }
+
+    public void setURL(String URL) {
+        this.URL = URL;
+    }
+
     @Override
     public String toString() {
-        return "{\n" +
-                "\tqueryID: " + getQueryID() + "\n" +
-                "\tauthor: " + getAuthor() + "\n" +
-                "\ttext: " + getText() + "\n" +
-                "\tdate: " + getDate().toString() + "\n" +
-                "}";
+        return "Mention{" +
+                "queryID=" + queryID +
+                ", author='" + author + '\'' +
+                ", text='" + text + '\'' +
+                ", sourceTag='" + sourceTag + '\'' +
+                ", URL='" + URL + '\'' +
+                ", date=" + date +
+                '}';
     }
 
     @Override
