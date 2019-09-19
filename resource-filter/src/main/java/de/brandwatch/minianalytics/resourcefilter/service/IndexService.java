@@ -17,19 +17,23 @@ public class IndexService {
     private final SolrClient solrClient;
 
     @Autowired
-    public IndexService(SolrClient solrClient) {
-        this.solrClient = solrClient;
+    public IndexService(SolrClient customSolrClient) {
+        this.solrClient = customSolrClient;
     }
 
     public boolean isUniqueResource(Resource resource) throws IOException, SolrServerException {
+
         SolrQuery query = new SolrQuery();
-        query.set("URL", resource.getURL());
+
+        query.set("q", "url:\"" + resource.getURL() + "\"");
         QueryResponse response = solrClient.query(query);
-        if(response.getResults().getNumFound() > 0) return false;
+        if(response.getResults().getNumFound() > 0) {
+            return false;
+        }
 
         SolrInputDocument document = new SolrInputDocument();
-        document.addField("URL", resource.getURL());
-        document.addField("date", resource.getDate());
+        document.addField("url", resource.getURL());
+        document.addField("date", resource.getDate().toString());
         solrClient.add(document);
         solrClient.commit();
 

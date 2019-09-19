@@ -5,11 +5,14 @@ import de.brandwatch.minianalytics.twitterpuller.model.Resource;
 import de.brandwatch.minianalytics.twitterpuller.postgres.cache.QueryCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import twitter4j.*;
 
 import java.time.Instant;
 
-//@Component
+@Component
 public class TweetSearcher {
 
     private static final Logger logger = LoggerFactory.getLogger(TweetSearcher.class);
@@ -20,7 +23,7 @@ public class TweetSearcher {
 
     private final Twitter twitter;
 
-    //@Autowired
+    @Autowired
     public TweetSearcher(QueryCache queryCache, Producer producer, Twitter twitter) {
         this.queryCache = queryCache;
         this.producer = producer;
@@ -28,7 +31,7 @@ public class TweetSearcher {
     }
 
 
-    //@Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 1000 * 20)
     public void searchTweets(){
         queryCache.getCachedQueries().forEach(this::search);
     }
@@ -56,6 +59,8 @@ public class TweetSearcher {
         resource.setDate(date);
         resource.setText(tweet.getText());
         resource.setAuthor(tweet.getUser().getName());
+        resource.setSourceTag("twitter");
+        resource.setURL("https://twitter.com/" + tweet.getUser().getScreenName() + "/status/" + tweet.getId());
         return resource;
     }
 }

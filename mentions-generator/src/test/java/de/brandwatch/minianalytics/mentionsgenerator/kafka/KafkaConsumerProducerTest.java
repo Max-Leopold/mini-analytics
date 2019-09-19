@@ -92,7 +92,7 @@ public class KafkaConsumerProducerTest {
 
         //Populate Database
         Query query = new Query();
-        query.setQuery("Hello AND author:\"Max Leopold\"");
+        query.setQuery("Hello AND author:\"Maximilian Leopold\"");
         queryRepository.save(query);
 
         ObjectMapper mapper = new ObjectMapper();
@@ -123,13 +123,15 @@ public class KafkaConsumerProducerTest {
 
         kafkaConsumer.subscribe(Collections.singleton("mentions"));
 
-        Resource resource = new Resource();
-        Instant instant = Instant.now();
-        resource.setText("Hello World");
-        resource.setDate(instant);
-        resource.setAuthor("Max Leopold");
+		Resource matched = new Resource();
+		Instant instant = Instant.now();
+		matched.setAuthor("Maximilian Leopold");
+		matched.setDate(instant);
+		matched.setText("Hello World");
+		matched.setSourceTag("twitter");
+		matched.setURL("abc.com");
 
-        ProducerRecord<String, Resource> record = new ProducerRecord<>("resources", String.valueOf(Instant.now()), resource);
+        ProducerRecord<String, Resource> record = new ProducerRecord<>("uniqueResources", String.valueOf(Instant.now()), matched);
 
         kafkaProducer.send(record);
 
@@ -142,12 +144,14 @@ public class KafkaConsumerProducerTest {
 
             records.records("mentions").forEach(x -> {
 
-                    assertThat(x.value().getAuthor(), is(equalTo("Max Leopold")));
+                    assertThat(x.value().getAuthor(), is(equalTo("Maximilian Leopold")));
                     assertThat(x.value().getText(), is(equalTo("Hello World")));
                     assertThat(String.valueOf(x.value().getQueryID()), is(equalTo("1")));
                 DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
                         .withZone(ZoneId.of("UTC"));
                     assertThat(x.value().getDate().toString(), is(equalTo(dateTimeFormatter.format(instant))));
+                    assertThat(x.value().getSourceTag(), is(equalTo("twitter")));
+                    assertThat(x.value().getURL(), is(equalTo("abc.com")));
 
             });
             return true;

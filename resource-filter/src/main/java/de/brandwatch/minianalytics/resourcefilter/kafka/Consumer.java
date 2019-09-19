@@ -2,6 +2,7 @@ package de.brandwatch.minianalytics.resourcefilter.kafka;
 
 import de.brandwatch.minianalytics.resourcefilter.model.Resource;
 import de.brandwatch.minianalytics.resourcefilter.service.IndexService;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ public class Consumer {
     }
 
     @KafkaListener(topics = "resources")
-    public void receive(Resource resource) throws IOException, SolrServerException {
+    public void receive(Resource resource) throws IOException, SolrServerException, ParseException {
         logger.info("received message='{}'", resource.toString());
 
         if(indexService.isUniqueResource(resource)) producer.send(resource);
