@@ -1,6 +1,5 @@
 package de.brandwatch.minianalytics.api.service;
 
-import com.google.gson.Gson;
 import de.brandwatch.minianalytics.api.solr.model.Mention;
 import de.brandwatch.minianalytics.api.solr.repository.MentionRepository;
 import org.slf4j.Logger;
@@ -17,8 +16,6 @@ public class MentionService {
     private static final Logger logger = LoggerFactory.getLogger(MentionService.class);
 
     private final MentionRepository mentionRepository;
-
-    private static final Gson gson = new Gson();
 
     @Autowired
     public MentionService(MentionRepository mentionRepository) {
