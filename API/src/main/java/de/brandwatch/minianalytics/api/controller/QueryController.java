@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -34,7 +33,7 @@ public class QueryController {
             logger.info("POST /queries: {}", query);
             return queryService.createQuery(query);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Couldn't create Query.", e);
         }
     }
 
@@ -44,16 +43,17 @@ public class QueryController {
             logger.info("GET /queries");
             return queryService.getAllQueries();
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Couldn't fetch Queries. Maybe there is a database problem.", e);
         }
     }
 
     @GetMapping(value = "/queries/{queryID}")
-    public Optional<Query> singleQuery(@PathVariable("queryID") String queryID) {
+    public Query singleQuery(@PathVariable("queryID") String queryID) {
         try {
             logger.info("GET /queries/" + queryID);
-            logger.info(queryService.getQueryByID(queryID).toString());
-            return queryService.getQueryByID(queryID);
+            return queryService.getQueryByID(queryID)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT, "No Query with ID " + queryID + " was found."));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "", e);
         }
