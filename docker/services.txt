@@ -1,0 +1,1 @@
+zoo1 kafka1 kafka2 kafka3 postgres solr1 solr2 create-collection mention-storer mentions-generator
