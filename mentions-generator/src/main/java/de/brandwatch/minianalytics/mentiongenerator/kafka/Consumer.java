@@ -18,7 +18,7 @@ public class Consumer {
         this.luceneService = luceneService;
     }
 
-    @KafkaListener(topics = {"twitter, reddit"})
+    @KafkaListener(topics = "resources")
     public void receive(Resource resource) {
         logger.info("received message='{}'", resource.toString());
 

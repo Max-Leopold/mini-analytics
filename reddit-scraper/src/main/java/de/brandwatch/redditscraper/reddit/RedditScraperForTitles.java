@@ -13,16 +13,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 public class RedditScraperForTitles {
 
     private static final Logger logger = LoggerFactory.getLogger(RedditScraperForTitles.class);
 
     private static final String REDDIT_URL = "https://old.reddit.com";
-
-    private Set<String> visitedSites = new HashSet<>();
 
     private final Producer producer;
 
@@ -39,9 +35,8 @@ public class RedditScraperForTitles {
         scrapeRedditForTitles(REDDIT_URL, 1);
     }
 
-    public void scrapeRedditForTitles(String url, int pageCounter) throws IOException {
+    private void scrapeRedditForTitles(String url, int pageCounter) throws IOException {
         Document reddit = Jsoup.connect(url).get();
-        Elements posts = reddit.getElementsByClass("top-matter"); //Whitespace at the end is important!
 
         reddit.getElementsByClass("top-matter").stream()
                 .map(this::mapToResource)
@@ -53,7 +48,9 @@ public class RedditScraperForTitles {
         for (Element element : nextPage) {
             pageCounter = pageCounter + 1;
             //Scrape top 50 sites
-            if(pageCounter < 51) scrapeRedditForTitles(element.attr("href"), pageCounter);
+            if(pageCounter < 51) {
+                scrapeRedditForTitles(element.attr("href"), pageCounter);
+            }
         }
     }
 

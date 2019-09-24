@@ -18,6 +18,6 @@ public class Producer {
     public void send(Resource resource){
 
         logger.info("sending message='{}'", resource.toString());
-        kafkaTemplate.send("reddit", String.valueOf(Instant.now()), resource);
+        kafkaTemplate.send("resources", String.valueOf(Instant.now()), resource);
     }
 }
