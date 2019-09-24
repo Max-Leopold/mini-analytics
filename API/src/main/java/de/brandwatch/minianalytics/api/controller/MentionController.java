@@ -41,18 +41,23 @@ public class MentionController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam(value = "endDate", defaultValue = "")
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
-        try{
-            if(startDate == null) { startDate = LocalDateTime.now().minusDays(1); };
-            if(endDate == null) { endDate = LocalDateTime.now(); };
+        try {
+            if (startDate == null) {
+                startDate = LocalDateTime.now().minusDays(1);
+            }
 
-            if(!validateDates(startDate, endDate)){
+            if (endDate == null) {
+                endDate = LocalDateTime.now();
+            }
+
+            if (!validateDates(startDate, endDate)) {
                 throw new DateTimeException("Dates are not in the right order");
             }
 
             return mentionService.getMentionsFromQueryID(queryID,
                     startDate.toInstant(ZoneOffset.UTC),
                     endDate.toInstant(ZoneOffset.UTC));
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "", e);
         }
     }
