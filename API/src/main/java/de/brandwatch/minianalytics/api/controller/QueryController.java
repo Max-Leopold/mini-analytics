@@ -1,14 +1,16 @@
 package de.brandwatch.minianalytics.api.controller;
 
 import com.google.gson.Gson;
+import de.brandwatch.minianalytics.api.postgres.model.Query;
 import de.brandwatch.minianalytics.api.service.QueryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 
 @RestController
@@ -26,31 +28,32 @@ public class QueryController {
     }
 
     @PostMapping(value = "/queries")
-    public ResponseEntity query(@RequestParam String query) {
+    public Query query(@RequestParam String query) {
         try {
             logger.info("POST /queries: {}", query);
-            return ResponseEntity.status(200).body(gson.toJson(queryService.createQuery(query)));
+            return queryService.createQuery(query);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Couldn't create Query.", e);
         }
     }
 
     @GetMapping(value = "/queries")
-    public ResponseEntity queries() {
+    public List<Query> queries() {
         try {
             logger.info("GET /queries");
-            return ResponseEntity.status(200).body(gson.toJson(queryService.getAllQueries()));
+            return queryService.getAllQueries();
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Couldn't fetch Queries. Maybe there is a database problem.", e);
         }
     }
 
     @GetMapping(value = "/queries/{queryID}")
-    public ResponseEntity singleQuery(@PathVariable("queryID") String queryID) {
+    public Query singleQuery(@PathVariable("queryID") String queryID) {
         try {
             logger.info("GET /queries/" + queryID);
-            logger.info(queryService.getQueryByID(queryID).toString());
-            return ResponseEntity.status(200).body(gson.toJson(queryService.getQueryByID(queryID)));
+            return queryService.getQueryByID(queryID)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT, "No Query with ID " + queryID + " was found."));
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "", e);
         }
