@@ -30,10 +30,7 @@ public class QueryService {
     }
 
     public Query createQuery(String query) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails) principal).getUsername();
-
-        User user = userRepository.findByUsername(username);
+        User user = getUserFromSecurityContext();
         Query saveQuery = new Query(query, user);
 
         logger.info("Retrieved query: " + query);
@@ -41,21 +38,14 @@ public class QueryService {
     }
 
     public List<Query> getAllQueries() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails) principal).getUsername();
-
-        User user = userRepository.findByUsername(username);
+        User user = getUserFromSecurityContext();
         Long userId = user.getId();
 
         return queryRepository.findByUserId(userId);
     }
 
     public Optional<Query> getQueryByID(String queryID) throws Exception {
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails) principal).getUsername();
-
-        User user = userRepository.findByUsername(username);
+        User user = getUserFromSecurityContext();
         Long userId = user.getId();
 
         Optional<Query> query = queryRepository.findById(Long.valueOf(queryID));
@@ -64,6 +54,18 @@ public class QueryService {
             return queryRepository.findById(Long.valueOf(queryID));
         }
 
-        throw new Exception("Query " + queryID + " doesnt belong to user " + username);
+        throw new Exception("Query " + queryID + " doesnt belong to user " + user.getUsername());
+    }
+
+    public User getUserFromSecurityContext(){
+        try {
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = ((UserDetails) principal).getUsername();
+
+            return userRepository.findByUsername(username);
+        }catch (Exception e){
+            logger.error("Something went wrong authenticating the user", e);
+        }
+        return null;
     }
 }

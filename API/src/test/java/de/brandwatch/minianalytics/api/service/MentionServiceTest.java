@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,10 +39,15 @@ public class MentionServiceTest {
         List<Mention> mentionList = new ArrayList<>();
         mentionList.add(mention);
 
-        when(mentionRepository.findMentionsAfterDate(1L, "[* TO *]")).thenReturn(mentionList);
+        Instant startDate = Instant.now().minus(1, ChronoUnit.DAYS);
+        Instant endDate = Instant.now();
 
-        assertThat(mentionList, is(equalTo(mentionService.getMentionsFromQueryID("1", "", ""))));
-        verify(mentionRepository, times(1)).findMentionsAfterDate(1L, "[* TO *]");
+        String dateBounds = "[" + startDate +" TO " + endDate + "]";
+
+        when(mentionRepository.findMentionsAfterDate(1L, dateBounds)).thenReturn(mentionList);
+
+        assertThat(mentionList, is(equalTo(mentionService.getMentionsFromQueryID("1", startDate, endDate))));
+        verify(mentionRepository, times(1)).findMentionsAfterDate(1L, dateBounds);
 
     }
 
@@ -56,10 +62,13 @@ public class MentionServiceTest {
         List<Mention> mentionList = new ArrayList<>();
         mentionList.add(mention);
 
-        String dateBounds = "[2019-09-01T00:00:00Z TO *]";
+        Instant startDate = Instant.ofEpochMilli(1546300800);
+        Instant endDate = Instant.now();
+
+        String dateBounds = "[" + startDate+ " TO " + endDate + "]";
         when(mentionRepository.findMentionsAfterDate(1L, dateBounds)).thenReturn(mentionList);
 
-        assertThat(mentionList, is(equalTo(mentionService.getMentionsFromQueryID("1", "2019-09-01", ""))));
+        assertThat(mentionList, is(equalTo(mentionService.getMentionsFromQueryID("1", startDate, endDate))));
         verify(mentionRepository, times(1)).findMentionsAfterDate(1L, dateBounds);
     }
 }
