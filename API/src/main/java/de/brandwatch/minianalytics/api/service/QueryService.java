@@ -60,7 +60,9 @@ public class QueryService {
 
         Optional<Query> query = queryRepository.findById(Long.valueOf(queryID));
 
-        if(query.isPresent() && query.get().getUser().getId().equals(userId)) return queryRepository.findById(Long.valueOf(queryID));
+        if(query.isPresent() && query.get().getUser().getId().equals(userId)) {
+            return queryRepository.findById(Long.valueOf(queryID));
+        }
 
         throw new Exception("Query " + queryID + " doesnt belong to user " + username);
     }

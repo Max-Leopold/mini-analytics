@@ -2,6 +2,7 @@ package de.brandwatch.minianalytics.api.controller;
 
 
 import com.google.common.base.Preconditions;
+import de.brandwatch.minianalytics.api.security.service.ValidationService;
 import de.brandwatch.minianalytics.api.service.MentionService;
 import de.brandwatch.minianalytics.api.solr.model.Mention;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,12 @@ public class MentionController {
 
     private final MentionService mentionService;
 
+    private final ValidationService validationService;
+
     @Autowired
-    public MentionController(MentionService mentionService) {
+    public MentionController(MentionService mentionService, ValidationService validationService) {
         this.mentionService = mentionService;
+        this.validationService = validationService;
     }
 
     @GetMapping(value = "/mentions/{queryID}")
@@ -41,6 +45,7 @@ public class MentionController {
             Instant parsedEndDate = parseOrDefault(endDate, 0);
 
             validateDates(parsedStartDate, parsedEndDate);
+            validationService.validateUser(queryID);
 
             return mentionService.getMentionsFromQueryID(queryID, parsedStartDate, parsedEndDate);
         } catch (Exception e) {
