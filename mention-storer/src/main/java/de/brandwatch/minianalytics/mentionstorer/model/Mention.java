@@ -27,6 +27,12 @@ public class Mention {
     @JsonFormat
     private Instant date;
 
+    @Indexed(name = "sourceTag", type = "string")
+    private String sourceTag;
+
+    @Indexed(name = "url", type = "string")
+    private String url;
+
     public String getAuthor() {
         return author;
     }
@@ -65,5 +71,34 @@ public class Mention {
 
     public void setQueryID(long queryID) {
         this.queryID = queryID;
+    }
+
+    public String getSourceTag() {
+        return sourceTag;
+    }
+
+    public void setSourceTag(String sourceTag) {
+        this.sourceTag = sourceTag;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    @Override
+    public String toString() {
+        return "Mention{" +
+                "id='" + id + '\'' +
+                ", queryID=" + queryID +
+                ", author='" + author + '\'' +
+                ", text='" + text + '\'' +
+                ", date=" + date +
+                ", sourceTag='" + sourceTag + '\'' +
+                ", url='" + url + '\'' +
+                '}';
     }
 }

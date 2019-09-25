@@ -5,6 +5,8 @@ import com.google.common.base.Preconditions;
 import de.brandwatch.minianalytics.api.security.service.ValidationService;
 import de.brandwatch.minianalytics.api.service.MentionService;
 import de.brandwatch.minianalytics.api.solr.model.Mention;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,8 @@ import java.util.List;
 
 @RestController
 public class MentionController {
+
+    Logger logger = LoggerFactory.getLogger(MentionController.class);
 
     private final MentionService mentionService;
 
@@ -49,6 +53,7 @@ public class MentionController {
 
             return mentionService.getMentionsFromQueryID(queryID, parsedStartDate, parsedEndDate);
         } catch (Exception e) {
+            logger.error("Couldn't fetch mentions for Query " + queryID, e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Couldn't fetch mentions for Query " + queryID, e);
         }

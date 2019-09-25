@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: mentions-generator
+  name: mentions-generator
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mentions-generator
+    spec:
+      containers:
+      - env:
+        - name: WAIT_HOSTS
+          value: postgres-service:5432
+        image: maxleopold/mentions-generator
+        name: mentions-generator
+        imagePullPolicy: Always
+      hostname: mentions-generator
+      restartPolicy: Always

@@ -1,0 +1,61 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: QueryDB
+            - name: POSTGRES_PASSWORD
+              value: admin
+            - name: POSTGRES_USER
+              value: admin
+          image: postgres
+          name: postgres
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgres-persistent-storage
+              mountPath: /var/lib/postgres
+      restartPolicy: Always
+      hostname: postgres
+      volumes:
+        - name: postgres-persistent-storage
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+spec:
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pv-claim
+  labels:
+    app: postgres
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+

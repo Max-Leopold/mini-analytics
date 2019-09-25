@@ -1,0 +1,70 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: solr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: solr
+  template:
+    metadata:
+      labels:
+        app: solr
+    spec:
+      containers:
+        - command:
+            - bash
+            - -c
+            - exec solr -c -f
+          image: solr
+          name: solr1
+          ports:
+            - containerPort: 8983
+              name: http
+          volumeMounts:
+            - name: solr-persistent-storage
+              mountPath: /var/lib/solr
+      restartPolicy: Always
+      hostname: solr
+      volumes:
+        - name: solr-persistent-storage
+          persistentVolumeClaim:
+            claimName: solr-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: solr-service
+spec:
+  selector:
+    app: solr
+  ports:
+     - port: 8983
+       targetPort: 8983
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: solr-service-outside
+spec:
+  selector:
+    app: solr
+  ports:
+    - port: 8983
+      targetPort: 8983
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: solr-pv-claim
+  labels:
+    app: solr
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
