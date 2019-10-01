@@ -1,23 +1,19 @@
 package de.brandwatch.minianalytics.mentiongenerator.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.Instant;
+import java.util.Objects;
 
 public class Resource {
 
     private String author;
     private String text;
+    private String URL;
+    private String sourceTag;
 
-    @JsonSerialize(using = InstantSerializer.class)
-    @JsonDeserialize(using = InstantDeserializer.class)
+    @JsonFormat
     private Instant date;
-
-    public Resource() {
-    }
 
     public String getAuthor() {
         return author;
@@ -43,12 +39,45 @@ public class Resource {
         this.date = date;
     }
 
+    public String getURL() {
+        return URL;
+    }
+
+    public void setURL(String URL) {
+        this.URL = URL;
+    }
+
+    public String getSourceTag() {
+        return sourceTag;
+    }
+
+    public void setSourceTag(String sourceTag) {
+        this.sourceTag = sourceTag;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Resource)) return false;
+        Resource resource = (Resource) o;
+        return Objects.equals(getAuthor(), resource.getAuthor()) &&
+                Objects.equals(getText(), resource.getText()) &&
+                Objects.equals(getDate(), resource.getDate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getAuthor(), getText(), getDate());
+    }
+
     @Override
     public String toString() {
-        return "{\n" +
-                "\tauthor: " + getAuthor() + "\n" +
-                "\ttext: " + getText() + "\n" +
-                "\tdate: " + getDate().toString() + "\n" +
-                "}";
+        return "Resource{" +
+                "author='" + author + '\'' +
+                ", text='" + text + '\'' +
+                ", URL='" + URL + '\'' +
+                ", sourceTag='" + sourceTag + '\'' +
+                ", date=" + date +
+                '}';
     }
 }

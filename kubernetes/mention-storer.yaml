@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: mention-storer
+  name: mention-storer
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mention-storer
+    spec:
+      containers:
+      - env:
+        - name: WAIT_HOSTS
+          value: solr-service:8983
+        image: maxleopold/mention-storer
+        name: mention-storer
+        imagePullPolicy: Always
+      hostname: mention-storer
+      restartPolicy: Always

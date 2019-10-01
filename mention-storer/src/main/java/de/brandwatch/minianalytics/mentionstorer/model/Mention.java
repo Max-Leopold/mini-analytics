@@ -1,7 +1,6 @@
 package de.brandwatch.minianalytics.mentionstorer.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
@@ -25,8 +24,14 @@ public class Mention {
     private String text;
 
     @Indexed(name = "date", type = "date")
-    @JsonDeserialize(using = InstantDeserializer.class)
+    @JsonFormat
     private Instant date;
+
+    @Indexed(name = "sourceTag", type = "string")
+    private String sourceTag;
+
+    @Indexed(name = "url", type = "string")
+    private String url;
 
     public String getAuthor() {
         return author;
@@ -66,5 +71,34 @@ public class Mention {
 
     public void setQueryID(long queryID) {
         this.queryID = queryID;
+    }
+
+    public String getSourceTag() {
+        return sourceTag;
+    }
+
+    public void setSourceTag(String sourceTag) {
+        this.sourceTag = sourceTag;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    @Override
+    public String toString() {
+        return "Mention{" +
+                "id='" + id + '\'' +
+                ", queryID=" + queryID +
+                ", author='" + author + '\'' +
+                ", text='" + text + '\'' +
+                ", date=" + date +
+                ", sourceTag='" + sourceTag + '\'' +
+                ", url='" + url + '\'' +
+                '}';
     }
 }

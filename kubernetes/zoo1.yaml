@@ -1,0 +1,60 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: zoo1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zoo1
+  template:
+    metadata:
+      labels:
+        app: zoo1
+    spec:
+      containers:
+        - env:
+            - name: ZOO_MY_ID
+              value: "1"
+            - name: ZOO_PORT
+              value: "2181"
+            - name: ZOO_SERVERS
+              value: server.1=zoo1:2888:3888
+          image: zookeeper:3.4.9
+          name: zoo1
+          ports:
+            - containerPort: 2181
+          volumeMounts:
+            - name: zoo1-persistent-storage
+              mountPath: /var/lib/zoo1
+      hostname: zoo1
+      restartPolicy: Always
+      volumes:
+        - name: zoo1-persistent-storage
+          persistentVolumeClaim:
+            claimName: zoo1-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zoo1-service
+spec:
+  selector:
+    app: zoo1
+  ports:
+    - port: 2181
+      targetPort: 2181
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: zoo1-pv-claim
+  labels:
+    app: zoo1
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi

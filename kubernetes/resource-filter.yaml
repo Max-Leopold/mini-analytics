@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: resource-filter
+  name: resource-filter
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: resource-filter
+    spec:
+      containers:
+      - env:
+        - name: WAIT_HOSTS
+          value: kafka1-service:9092
+        image: maxleopold/resource-filter
+        name: resource-filter
+        imagePullPolicy: Always
+      hostname: resource-filter
+      restartPolicy: Always

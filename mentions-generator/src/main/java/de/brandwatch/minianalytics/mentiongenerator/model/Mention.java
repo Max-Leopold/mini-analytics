@@ -1,9 +1,6 @@
 package de.brandwatch.minianalytics.mentiongenerator.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -14,9 +11,10 @@ public class Mention {
 
     private String author;
     private String text;
+    private String sourceTag;
+    private String URL;
 
-    @JsonSerialize(using = InstantSerializer.class)
-    @JsonDeserialize(using = InstantDeserializer.class)
+    @JsonFormat
     private Instant date;
 
     public Mention() {
@@ -54,14 +52,32 @@ public class Mention {
         this.queryID = queryID;
     }
 
+    public String getSourceTag() {
+        return sourceTag;
+    }
+
+    public void setSourceTag(String sourceTag) {
+        this.sourceTag = sourceTag;
+    }
+
+    public String getURL() {
+        return URL;
+    }
+
+    public void setURL(String URL) {
+        this.URL = URL;
+    }
+
     @Override
     public String toString() {
-        return "{\n" +
-                "\tqueryID: " + getQueryID() + "\n" +
-                "\tauthor: " + getAuthor() + "\n" +
-                "\ttext: " + getText() + "\n" +
-                "\tdate: " + getDate().toString() + "\n" +
-                "}";
+        return "Mention{" +
+                "queryID=" + queryID +
+                ", author='" + author + '\'' +
+                ", text='" + text + '\'' +
+                ", sourceTag='" + sourceTag + '\'' +
+                ", URL='" + URL + '\'' +
+                ", date=" + date +
+                '}';
     }
 
     @Override

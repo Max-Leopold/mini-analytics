@@ -39,7 +39,7 @@ To Date (Optional): <input type="date" id="datePickerTo">
 <script>
     function createQuery() {
         console.log("createQuery called");
-        axios.post('http://localhost:8080/queries', null, {
+        axios.post('/queries', null, {
             params: {
                 query: document.getElementById("createQueryInput").value
             }
@@ -51,7 +51,7 @@ To Date (Optional): <input type="date" id="datePickerTo">
 
     function getQueryByID() {
         console.log("getQueryByID");
-        axios.get('http://localhost:8080/queries/' + document.getElementById("getQueryWithIDInput").value)
+        axios.get('/queries/' + document.getElementById("getQueryWithIDInput").value)
             .then(function (response) {
                 console.log(response.data.value.query);
                 document.getElementById("getQueryWithIDDiv").innerHTML = "<br> Got query (id: " + response.data.value.queryID + "): " + response.data.value.query + " ";
@@ -60,7 +60,7 @@ To Date (Optional): <input type="date" id="datePickerTo">
 
     function getAllQueries() {
         console.log("getAllQueries");
-        axios.get('http://localhost:8080/queries')
+        axios.get('/queries')
             .then(function (response) {
                 console.log(response.data);
                 var json = JSON.stringify(response.data, null, 2);
@@ -70,7 +70,7 @@ To Date (Optional): <input type="date" id="datePickerTo">
 
     function getMentionsFromQuery() {
         console.log("getMentionsFromQuery")
-        axios.get('http://localhost:8080/mentions/' + document.getElementById("getMentionsFromQueryIDInput").value, {
+        axios.get('/mentions/' + document.getElementById("getMentionsFromQueryIDInput").value, {
             params: {
                 startDate: document.getElementById("datePickerFrom").value,
                 endDate: document.getElementById("datePickerTo").value

@@ -41,8 +41,8 @@ public class LuceneService {
 
     private final QueryCache queryCache;
 
-    private final Directory memoryIndex = new RAMDirectory();
-    private final StandardAnalyzer analyzer = new StandardAnalyzer();
+    private Directory memoryIndex = new RAMDirectory();
+    private StandardAnalyzer analyzer = new StandardAnalyzer();
 
     private final IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
     private final IndexWriter writer = new IndexWriter(memoryIndex, indexWriterConfig);
@@ -61,11 +61,14 @@ public class LuceneService {
     }
 
     public void writeToQ(Resource resource) {
+        logger.info("Added resource to queue");
         queue.add(resource);
+        logger.info("Queue size: " + queue.size());
     }
 
     @Scheduled(fixedDelay = 5 * 1000)
     public void indexQ() throws IOException, ParseException {
+        logger.info("Index Queue for size " + queue.size());
         while (!queue.isEmpty()) {
             Resource resource = queue.poll();
 
@@ -74,6 +77,8 @@ public class LuceneService {
             document.add(new TextField("author", resource.getAuthor(), Field.Store.YES));
             document.add(new TextField("text", resource.getText(), Field.Store.YES));
             document.add(new TextField("date", resource.getDate().toString(), Field.Store.YES));
+            document.add(new TextField("sourceTag", resource.getSourceTag(), Field.Store.YES));
+            document.add(new TextField("url", resource.getURL(), Field.Store.YES));
 
             writer.addDocument(document);
             writer.commit();
@@ -84,6 +89,7 @@ public class LuceneService {
 
     private void searchIndex() throws IOException, ParseException {
 
+        logger.info("Search index");
         reader = DirectoryReader.open(memoryIndex);
         searcher = new IndexSearcher(reader);
 
@@ -116,6 +122,8 @@ public class LuceneService {
             mention.setText(document.get("text"));
             mention.setQueryID(query.getQueryID());
             mention.setDate(Instant.parse(document.get("date")));
+            mention.setSourceTag(document.get("sourceTag"));
+            mention.setURL(document.get("url"));
 
             logger.info("Generated Mention: " + mention);
 

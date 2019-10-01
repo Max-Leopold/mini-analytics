@@ -16,10 +16,13 @@ public class Producer {
 
     @Autowired
     public Producer(KafkaTemplate<String, Mention> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public void send(Mention mention){
         logger.info("sending message='{}", mention);
-        kafkaTemplate.send("mentions",String.valueOf(Instant.now()), mention);
+        kafkaTemplate.send("mentions",
+                String.valueOf(Instant.now()),
+                mention);
     }
 }

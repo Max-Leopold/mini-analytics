@@ -1,6 +1,9 @@
 package de.brandwatch.minianalytics.twitterpuller.kafka.config;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import de.brandwatch.minianalytics.twitterpuller.kafka.Producer;
 import de.brandwatch.minianalytics.twitterpuller.model.Resource;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -35,7 +38,12 @@ public class ProducerConfig {
 
     @Bean
     public ProducerFactory<String, Resource> producerFactory(){
-        return new DefaultKafkaProducerFactory<>(producerConfigs());
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        JsonSerializer<Resource> jsonSerializer = new JsonSerializer<>(mapper);
+
+        return new DefaultKafkaProducerFactory<>(producerConfigs(), new StringSerializer(), jsonSerializer);
     }
 
     @Bean

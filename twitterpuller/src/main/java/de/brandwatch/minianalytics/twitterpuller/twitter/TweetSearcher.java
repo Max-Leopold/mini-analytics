@@ -31,7 +31,7 @@ public class TweetSearcher {
     }
 
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 1000 * 20)
     public void searchTweets(){
         queryCache.getCachedQueries().forEach(this::search);
     }
@@ -59,6 +59,8 @@ public class TweetSearcher {
         resource.setDate(date);
         resource.setText(tweet.getText());
         resource.setAuthor(tweet.getUser().getName());
+        resource.setSourceTag("twitter");
+        resource.setURL("https://twitter.com/" + tweet.getUser().getScreenName() + "/status/" + tweet.getId());
         return resource;
     }
 }

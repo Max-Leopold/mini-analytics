@@ -1,6 +1,9 @@
 package de.brandwatch.minianalytics.mentiongenerator.kafka.config;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import de.brandwatch.minianalytics.mentiongenerator.kafka.Producer;
 import de.brandwatch.minianalytics.mentiongenerator.model.Mention;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -10,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +38,12 @@ public class ProducerConfig {
 
     @Bean
     public ProducerFactory<String, Mention> producerFactory(){
-        return new DefaultKafkaProducerFactory<>(producerConfigs());
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        JsonSerializer<Mention> jsonSerializer = new JsonSerializer<>(mapper);
+
+        return new DefaultKafkaProducerFactory<>(producerConfigs(), new StringSerializer(), jsonSerializer);
     }
 
     @Bean

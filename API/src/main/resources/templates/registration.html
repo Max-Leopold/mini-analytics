@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
 >
 <head>
     <meta charset="UTF-8">
@@ -13,7 +13,7 @@
     <div><input type="submit" value="Sign up" onclick="registerUser()"/></div>
     <br>
     <div>
-        <form action="http://localhost:8080/login">
+        <form th:action="@{/login}">
             <input type="submit" value="Login"/>
         </form>
     </div>
@@ -24,7 +24,7 @@
         var username = document.getElementById("userNameInput").value;
         var password = document.getElementById("passwordInput").value;
 
-        axios.post('http://localhost:8080/registration', null, {
+        axios.post('/registration', null, {
             params: {
                 username: username,
                 password: password
