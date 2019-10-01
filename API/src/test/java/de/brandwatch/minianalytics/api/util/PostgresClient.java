@@ -44,7 +44,7 @@ public class PostgresClient {
         statement.execute("alter table if exists user_table_roles add constraint FKhn8b43sudbfyi60j8m0he2num foreign key (user_id) references user_table");
     }
 
-    public void inserUser(User user) throws SQLException {
+    public void insertUser(User user) throws SQLException {
         connection.createStatement().execute("insert into user_table (password, username, id) values ('" +
                 user.getPassword() + "', '" +
                 user.getUsername() + "', " +

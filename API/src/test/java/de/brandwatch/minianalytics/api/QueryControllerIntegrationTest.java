@@ -89,7 +89,7 @@ public class QueryControllerIntegrationTest {
                 bCryptPasswordEncoder.encode("password"),
                 new HashSet<>());
         user.setId(1L);
-        postgresClient.inserUser(user);
+        postgresClient.insertUser(user);
 
         httpSession = mockMvc.perform(formLogin("/login")
                 .user("username")
