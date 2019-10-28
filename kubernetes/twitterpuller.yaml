@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -15,9 +15,12 @@ spec:
       - env:
         - name: WAIT_HOSTS
           value: postgres-service:5432
-        image: maxleopold/twitterpuller:1.0
+        image: maxleopold/twitterpuller
         name: twitter-puller
         imagePullPolicy: Always
       hostname: twitterpuller
       restartPolicy: Always
+  selector:
+    matchLabels:
+      app: twitterpuller
 

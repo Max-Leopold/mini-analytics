@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -20,3 +20,6 @@ spec:
         imagePullPolicy: Always
       hostname: mentions-generator
       restartPolicy: Always
+  selector:
+    matchLabels:
+      app: mentions-generator
