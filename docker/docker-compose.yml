@@ -130,7 +130,7 @@ services:
     environment:
       WAIT_HOSTS: postgres:5432
 
-  twitter-puller:
+  Twitter:
     build: ../twitterpuller/
     hostname: twitterpuller
     restart: always
