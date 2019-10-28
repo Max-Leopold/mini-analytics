@@ -92,6 +92,16 @@
             <version>2.2.8.RELEASE</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.brandwatch.minianalytics</groupId>
+            <artifactId>API</artifactId>
+            <version>0.1</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 
