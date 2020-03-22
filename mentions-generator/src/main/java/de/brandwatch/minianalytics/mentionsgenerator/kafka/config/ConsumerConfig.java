@@ -1,9 +1,12 @@
-package de.brandwatch.minianalytics.mentiongenerator.kafka.config;
+package de.brandwatch.minianalytics.mentionsgenerator.kafka.config;
 
 
-import de.brandwatch.minianalytics.mentiongenerator.kafka.Consumer;
-import de.brandwatch.minianalytics.mentiongenerator.model.Resource;
-import de.brandwatch.minianalytics.mentiongenerator.service.LuceneService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import de.brandwatch.minianalytics.mentionsgenerator.kafka.Consumer;
+import de.brandwatch.minianalytics.mentionsgenerator.model.Resource;
+import de.brandwatch.minianalytics.mentionsgenerator.service.LuceneService;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -42,10 +45,13 @@ public class ConsumerConfig {
 
     @Bean
     public ConsumerFactory<String, Resource> consumerFactory(){
-        JsonDeserializer jsonDeserializer = new JsonDeserializer<>(Resource.class, false);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        JsonDeserializer<Resource> jsonDeserializer = new JsonDeserializer<>(Resource.class ,mapper, false);
         jsonDeserializer.addTrustedPackages("*");
 
-        return new DefaultKafkaConsumerFactory<String, Resource>(consumerConfigs(), new StringDeserializer(), jsonDeserializer);
+        return new DefaultKafkaConsumerFactory<>(consumerConfigs(), new StringDeserializer(), jsonDeserializer);
     }
 
     @Bean

@@ -1,6 +1,6 @@
-package de.brandwatch.minianalytics.mentiongenerator.kafka;
+package de.brandwatch.minianalytics.mentionsgenerator.kafka;
 
-import de.brandwatch.minianalytics.mentiongenerator.model.Mention;
+import de.brandwatch.minianalytics.mentionsgenerator.model.Mention;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,7 @@ public class Producer {
 
     @Autowired
     public Producer(KafkaTemplate<String, Mention> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public void send(Mention mention){
