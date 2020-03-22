@@ -13,6 +13,7 @@
         <module>mentions-generator</module>
         <module>API</module>
         <module>twitterpuller</module>
+        <module>resource-filter</module>
         <module>reddit-scraper</module>
     </modules>
 

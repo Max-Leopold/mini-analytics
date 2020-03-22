@@ -30,10 +30,11 @@ public class TwitterPullerStatusListener implements StatusListener {
         resource.setDate(date);
         resource.setText(status.getText());
         resource.setAuthor(status.getUser().getName());
+        resource.setSourceTag("twitter");
+        resource.setURL("https://twitter.com/" + status.getUser().getScreenName() + "/status/" + status.getId());
 
         //Post mention into Kafka Topic
         producer.send(resource);
-
     }
 
     @Override

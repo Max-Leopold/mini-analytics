@@ -77,11 +77,13 @@ public class LuceneService {
             document.add(new TextField("author", resource.getAuthor(), Field.Store.YES));
             document.add(new TextField("text", resource.getText(), Field.Store.YES));
             document.add(new TextField("date", resource.getDate().toString(), Field.Store.YES));
+            document.add(new TextField("sourceTag", resource.getSourceTag(), Field.Store.YES));
+            document.add(new TextField("url", resource.getURL(), Field.Store.YES));
 
             writer.addDocument(document);
             writer.commit();
         }
-
+        writer.commit();
         searchIndex();
     }
 
@@ -120,6 +122,8 @@ public class LuceneService {
             mention.setText(document.get("text"));
             mention.setQueryID(query.getQueryID());
             mention.setDate(Instant.parse(document.get("date")));
+            mention.setSourceTag(document.get("sourceTag"));
+            mention.setURL(document.get("url"));
 
             logger.info("Generated Mention: " + mention);
 

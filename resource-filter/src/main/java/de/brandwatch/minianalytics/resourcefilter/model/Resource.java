@@ -1,4 +1,4 @@
-package de.brandwatch.minianalytics.mentionsgenerator.model;
+package de.brandwatch.minianalytics.resourcefilter.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -12,7 +12,7 @@ public class Resource {
     private String URL;
     private String sourceTag;
 
-    @JsonFormat(pattern = "yyy-MM-dd HH:mm:ss", timezone = "UTC")
+    @JsonFormat
     private Instant date;
 
     public String getAuthor() {
