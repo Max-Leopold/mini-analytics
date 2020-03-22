@@ -1,6 +1,9 @@
 package de.brandwatch.minianalytics.mentionstorer.kafka.config;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import de.brandwatch.minianalytics.mentionstorer.kafka.Consumer;
 import de.brandwatch.minianalytics.mentionstorer.model.Mention;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -41,8 +44,10 @@ public class ConsumerConfig {
 
     @Bean
     public ConsumerFactory<String, Mention> consumerFactory() {
-        JsonDeserializer<Mention> jsonDeserializer = new JsonDeserializer<>(Mention.class, false);
-        jsonDeserializer.addTrustedPackages("*");
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        JsonDeserializer<Mention> jsonDeserializer = new JsonDeserializer<>(Mention.class ,mapper, false);
 
         return new DefaultKafkaConsumerFactory<>(consumerConfigs(), new StringDeserializer(), jsonDeserializer);
     }
