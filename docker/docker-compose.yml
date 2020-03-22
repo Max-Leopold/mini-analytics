@@ -27,46 +27,48 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
       KAFKA_BROKER_ID: 1
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_DELETE_TOPIC_ENABLE: "true"
     volumes:
       - kafka1:/var/lib/kafka1/data
     depends_on:
       - zoo1
 
-  kafka2:
-    image: confluentinc/cp-kafka:5.3.0
-    hostname: kafka2
-    ports:
-      - "9093:9093"
-    restart: always
-    environment:
-      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka2:19093,LISTENER_DOCKER_EXTERNAL://kafka2:9093
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
-      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
-      KAFKA_BROKER_ID: 2
-      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
-    volumes:
-      - kafka2:/var/lib/kafka2/data
-    depends_on:
-      - zoo1
-
-  kafka3:
-    image: confluentinc/cp-kafka:5.3.0
-    hostname: kafka3
-    ports:
-      - "9094:9094"
-    restart: always
-    environment:
-      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka3:19094,LISTENER_DOCKER_EXTERNAL://kafka3:9094
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
-      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
-      KAFKA_BROKER_ID: 3
-      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
-    volumes:
-      - kafka3:/var/lib/kafka3/data
-    depends_on:
-      - zoo1
+#  kafka2:
+#    image: confluentinc/cp-kafka:5.3.0
+#    hostname: kafka2
+#    ports:
+#      - "9093:9093"
+#    restart: always
+#    environment:
+#      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka2:19093,LISTENER_DOCKER_EXTERNAL://kafka2:9093
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+#      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+#      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
+#      KAFKA_BROKER_ID: 2
+#      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+#    volumes:
+#      - kafka2:/var/lib/kafka2/data
+#    depends_on:
+#      - zoo1
+#
+#  kafka3:
+#    image: confluentinc/cp-kafka:5.3.0
+#    hostname: kafka3
+#    ports:
+#      - "9094:9094"
+#    restart: always
+#    environment:
+#      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka3:19094,LISTENER_DOCKER_EXTERNAL://kafka3:9094
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+#      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+#      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
+#      KAFKA_BROKER_ID: 3
+#      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+#    volumes:
+#      - kafka3:/var/lib/kafka3/data
+#    depends_on:
+#      - zoo1
 
   postgres:
     image: postgres
@@ -85,8 +87,8 @@ services:
     hostname: solr1
     ports:
       - "8983:8983"
-    environment:
-      ZK_HOST: zoo1:2181
+#    environment:
+#      ZK_HOST: zoo1:2181
     entrypoint:
       - bash
       - "-c"
@@ -94,20 +96,20 @@ services:
     volumes:
       - solr1:/var/lib/solr/data
 
-  solr2:
-    image: solr
-    hostname: solr2
-    ports:
-      - "8984:8984"
-    environment:
-      ZK_HOST: zoo1:2181
-    entrypoint:
-      - bash
-      - "-c"
-      - "exec solr -c -f"
-    volumes:
-      - solr2:/var/lib/solr2/data
-
+#  solr2:
+#    image: solr
+#    hostname: solr2
+#    ports:
+#      - "8984:8984"
+#    environment:
+#      ZK_HOST: zoo1:2181
+#    entrypoint:
+#      - bash
+#      - "-c"
+#      - "exec solr -c -f"
+#    volumes:
+#      - solr2:/var/lib/solr2/data
+#
   create-collection:
     build: .
     hostname: create-collection
@@ -121,7 +123,7 @@ services:
     hostname: mention-storer
     restart: always
     environment:
-      WAIT_HOSTS: solr:8983
+      WAIT_HOSTS: solr1:8983
 
   mentions-generator:
     build: ../mentions-generator/
@@ -137,7 +139,15 @@ services:
     environment:
       WAIT_HOSTS: postgres:5432
 
-
+  api:
+    build: ../API/
+    hostname: api
+    working_dir: /API
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      WAIT_HOSTS: postgres:5432
 
 volumes:
   kafka1:

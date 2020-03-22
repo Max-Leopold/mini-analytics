@@ -39,9 +39,9 @@ public class MentionsGeneratorApplication {
         return new ConcurrentMapCacheManager("{queryID, query}");
     }
 
-    //Refreh Cache every 10 minutes
+    //Refreh Cache every 10 seconds
     @CacheEvict(allEntries = true, cacheNames = "{queryID, query}")
-    @Scheduled(fixedDelay = 10 * 60 * 1000)
+    @Scheduled(fixedDelay = 10 * 1000)
     public void reportCacheEvict() {
         logger.info("Flush Cache " + Instant.now());
     }
